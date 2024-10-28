@@ -31,20 +31,38 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Buat user dengan role default (misalnya 'user')
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            // Set role default jika perlu
+            'role' => 'user', // ganti sesuai default role yang diinginkan
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // Percabangan berdasarkan role untuk redirect setelah register
+        $role = $user->role;
+
+        switch ($role) {
+            case 'admin':
+                return redirect()->route('admin.dashboard');
+            case 'purchasing':
+                return redirect()->route('purchasing.index');
+            case 'logistik':
+                return redirect()->route('logistik.index');
+            case 'user':
+                return redirect()->route('user.index');
+            default:
+                return redirect()->route('user.index'); // Atau route default lainnya
+        }
     }
+
 }

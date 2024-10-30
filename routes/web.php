@@ -21,7 +21,7 @@ Route::get('/admin', function () {
 Route::middleware(['auth', CheckRole::class . ':purchasing'])->group(function () {
     Route::get('/purchasing', function () {
         return view('purchasing.index');
-    })->name('purchasing.index');
+    })->name('purchasing.index'); //name berfungsi untuk jadi parameter di authencatedSessionController
 });
 
 // Route untuk logistik
@@ -31,11 +31,17 @@ Route::middleware(['auth', CheckRole::class . ':logistik'])->group(function () {
     })->name('logistik.index');
 });
 
+Route::middleware(['auth', CheckRole::class . ':logistik'])->group(function () {
+    Route::get('/sales', function () {
+        return view('sales.index');
+    })->name('sales.index');
+});
+
 // Route untuk user
 Route::middleware(['auth', CheckRole::class . ':user'])->group(function () {
-    Route::get('/user', function () {
-        return view('user.index');
-    })->name('user.index');
+    Route::get('/', function () {
+        return view('welcome');
+    })->name('welcome');
 });
 
 

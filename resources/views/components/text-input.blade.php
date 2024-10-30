@@ -1,3 +1,12 @@
 @props(['disabled' => false])
 
-<input @disabled($disabled) {{ $attributes->merge(['class' => 'border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm']) }}>
+<input 
+    @disabled($disabled) 
+    {{ $attributes->merge(['class' => 'bg-white text-gray-800 border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500']) }} 
+    type="email" 
+    id="email" 
+    name="email" 
+    value="{{ old('email') }}" 
+    required 
+    autofocus 
+/>

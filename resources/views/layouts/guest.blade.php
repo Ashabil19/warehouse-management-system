@@ -14,15 +14,27 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
+    <body class="font-sans text-gray-900 antialiased bg-gray-100">
+        <div class="min-h-screen flex">
+            <!-- Left Section -->
+            <div class="w-1/2 bg-cover bg-center relative hidden md:flex flex-col items-center justify-center p-10 text-white space-y-4" style="background-image: url('https://www.mintsoft.com/media/chzlxsn3/types_of_warehouse_blog.png?width=1200&height=630&v=1dab8149acd8d70'); background-size: cover; background-position: center;">
+                <!-- Semi-transparent overlay -->
+                <div class="absolute inset-0 bg-purple-800 opacity-75"></div>
+            
+                <!-- Content inside the overlay -->
+                <div class="relative z-10">
+                    <div class="mb-5">
+                        {{-- <img src="/path/to/your/logo.png" alt="Logo" class="w-20"> --}}
+                        <img src="{{ asset('assets/taharica-logo.png') }}" alt="Logo" class="w-20">
+                    </div>
+                    <h1 class="text-5xl font-bold">Welcome to GudangEasy</h1>
+                    <p class="text-lg">Your trusted warehouse management solution.</p>
+                </div>
             </div>
+            
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+            <!-- Right Section (Login Form) -->
+            <div class="flex flex-col justify-center items-center w-full md:w-1/2 bg-white p-8">
                 {{ $slot }}
             </div>
         </div>

@@ -41,8 +41,10 @@ class AuthenticatedSessionController extends Controller
                 return redirect()->intended(route('purchasing.index'));
             case 'logistik':
                 return redirect()->intended(route('logistik.index'));
+            case 'sales':
+                return redirect()->intended(route('sales.index'));
             case 'user':
-                return redirect()->intended(route('user.dashboard'));
+                return redirect()->intended(route('welcome'));
             default:
                 // Jika role tidak terdaftar, bisa diarahkan ke halaman default
                 return redirect()->intended(route('dashboard'));

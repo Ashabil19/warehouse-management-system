@@ -24,6 +24,12 @@ Route::middleware(['auth', CheckRole::class . ':purchasing'])->group(function ()
     })->name('purchasing.index'); //name berfungsi untuk jadi parameter di authencatedSessionController
 });
 
+Route::middleware(['auth', CheckRole::class . ':purchasing'])->group(function () {
+    Route::get('/inputbarang', function () {
+        return view('purchasing.inputbarang');
+    })->name('purchasing.index'); //name berfungsi untuk jadi parameter di authencatedSessionController
+});
+
 // Route untuk logistik
 Route::middleware(['auth', CheckRole::class . ':logistik'])->group(function () {
     Route::get('/logistik', function () {

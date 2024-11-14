@@ -43,8 +43,8 @@
 
             <!-- Barang Masuk Link -->
             <li>
-                <a href="{{ route('barangmasuk') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg 
-                    {{ request()->routeIs('barangmasuk') ? 'bg-gradient-to-r from-blue-700 to-purple-600 text-white font-semibold' : 'text-gray-800 hover:text-white hover:bg-gray-600' }}">
+                <a href="{{ route('barangmasuk.index') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg 
+                    {{ request()->routeIs('barangmasuk.index') ? 'bg-gradient-to-r from-blue-700 to-purple-600 text-white font-semibold' : 'text-gray-800 hover:text-white hover:bg-gray-600' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M16 2a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h12zm-2 7V7h-2v2H9V7H7v2H5v2h2v2h2v-2h2v2h2v-2h2V9h-2z" clip-rule="evenodd" />
                     </svg>
@@ -54,7 +54,7 @@
 
              <!-- Stock Link -->
              <li>
-                <a href="{{ route('stock') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg 
+                <a href="{{ route('stock.index') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg 
                     {{ request()->routeIs('stock') ? 'bg-gradient-to-r from-blue-700 to-purple-600 text-white font-semibold' : 'text-gray-800 hover:text-white hover:bg-gray-600' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M16 2a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h12zm-2 7V7h-2v2H9V7H7v2H5v2h2v2h2v-2h2v2h2v-2h2V9h-2z" clip-rule="evenodd" />

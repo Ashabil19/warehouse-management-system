@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BarangMasukController;
+
 
 
 Route::get('/', function () {
@@ -15,7 +17,7 @@ Route::get('/home', function () {
 })->name('home');
 
 Route::get('/inputbarang', function () {
-    return view('inputbarang');
+    return view('barangmasuk.create');
 })->name('inputbarang');
 
 // Route::get('/purchasing', function () {
@@ -23,22 +25,22 @@ Route::get('/inputbarang', function () {
 // })->name('purchasing');
 
 Route::get('/barangmasuk', function () {
-    return view('barangmasuk');
+    return view('barangmasuk.index');
 })->name('barangmasuk');
 
 
 Route::get('/stock', function () {
-    return view('stock');
+    return view('stock.index');
 })->name('stock');
 
 
 Route::get('/kirimbarang', function () {
-    return view('kirimbarang');
+    return view('barangkeluar.create');
 })->name('kirimbarang');
 
 
 Route::get('/barangkeluar', function () {
-    return view('barangkeluar');
+    return view('barangkeluar.index');
 })->name('barangkeluar');
 
 
@@ -51,5 +53,23 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+
+
+// ini buat Actions
+// Route::get('/barangmasuk', [BarangMasukController::class, 'index'])->name('barangmasuk.index');
+Route::get('/barangmasuk', [BarangMasukController::class, 'indexBarangMasuk'])->name('barangmasuk.index');
+Route::get('/stock', [BarangMasukController::class, 'indexStock'])->name('stock.index');
+Route::post('/barangmasuk', [BarangMasukController::class, 'store'])->name('barangmasuk.store');
+// Route::get('/barangmasuk', [BarangMasukController::class, 'index'])->name('barangmasuk.index');
+Route::delete('/barangmasuk/{id}', [BarangMasukController::class, 'destroy'])->name('barangmasuk.destroy');
+Route::post('/barangmasuk/accept/{id}', [BarangMasukController::class, 'accept'])->name('barangmasuk.accept');
+Route::get('/barangmasuk/{id}/details', [BarangMasukController::class, 'getDetails'])->name('barangmasuk.details');
+
+
+
+
+
 
 require __DIR__.'/auth.php';

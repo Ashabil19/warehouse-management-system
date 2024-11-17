@@ -5,12 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BarangMasukController;
 use App\Http\Controllers\KirimBarangController;
 
+// ini buat CRUD ke DB 
+// web.php
 Route::post('/kirim-barang', [KirimBarangController::class, 'store'])->name('kirim.barang');
 Route::get('/kirim-barang', [KirimBarangController::class, 'create'])->name('kirim.barang.create');
 
-
-
-// Route::post('/kirim-barang', [KirimBarangController::class, 'store']);
+// Route::get('/kirim-barang', [KirimBarangController::class, 'store']);
 
 Route::get('/', function () {
     return view('home');
@@ -39,12 +39,10 @@ Route::get('/stock', function () {
     return view('stock.index');
 })->name('stock');
 
+// Ini route yang benar untuk halaman kirimbarang, menggunakan controller
+Route::get('/kirimbarang', [KirimBarangController::class, 'create'])->name('kirimbarang');
 
-Route::get('/kirimbarang', function () {
-    return view('barangkeluar.create');
-})->name('kirimbarang');
-
-
+// Route berikutnya mengarahkan ke halaman barangkeluar
 Route::get('/barangkeluar', function () {
     return view('barangkeluar.index');
 })->name('barangkeluar');
@@ -60,9 +58,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
-
-
 // ini buat Actions
 // Route::get('/barangmasuk', [BarangMasukController::class, 'index'])->name('barangmasuk.index');
 Route::get('/barangmasuk', [BarangMasukController::class, 'indexBarangMasuk'])->name('barangmasuk.index');
@@ -72,10 +67,5 @@ Route::post('/barangmasuk', [BarangMasukController::class, 'store'])->name('bara
 Route::delete('/barangmasuk/{id}', [BarangMasukController::class, 'destroy'])->name('barangmasuk.destroy');
 Route::post('/barangmasuk/accept/{id}', [BarangMasukController::class, 'accept'])->name('barangmasuk.accept');
 Route::get('/barangmasuk/{id}/details', [BarangMasukController::class, 'getDetails'])->name('barangmasuk.details');
-
-
-
-
-
 
 require __DIR__.'/auth.php';

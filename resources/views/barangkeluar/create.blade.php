@@ -18,9 +18,11 @@
             <input list="barang-list" id="barang" name="barang" placeholder="Cari Barang..." 
                 class="w-full px-4 py-2 text-sm bg-gray-100 border border-gray-300 rounded-l-md focus:outline-none focus:border-purple-500" />
             <datalist id="barang-list">
-                <option value="HB01 - HOBO WATER LEVEL"></option>
-                <option value="HB02 - TEMPERATURE SENSOR"></option>
-                <option value="HB03 - PRESSURE SENSOR"></option>
+                @foreach($barangList as $stock)
+                    <option value="{{ $stock->barangmasuk->nama_barang }} ({{ $stock->barangmasuk->kode_barang }})">
+                        <!-- Option for barang item -->
+                    </option>
+                @endforeach
             </datalist>
             <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded-r-md hover:bg-purple-700">
                 <i class="fas fa-search">Search</i>

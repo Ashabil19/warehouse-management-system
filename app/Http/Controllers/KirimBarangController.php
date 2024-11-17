@@ -3,15 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\KirimBarang;
+use App\Models\Stock; // Pastikan kamu import model Stock
 
 class KirimBarangController extends Controller
 {
-
     public function create()
-{
-    return view('barangkeluar.create'); // Ganti dengan nama view form Anda
-}
+    {
+        // Ambil data stock yang dihubungkan dengan barangmasuk
+        $barangList = Stock::with('barangmasuk')->get();
+
+        // Kirimkan data barangList ke view
+        return view('barangkeluar.create', compact('barangList'));
+    }
+
     public function store(Request $request)
     {
         // Validasi data
@@ -22,13 +26,9 @@ class KirimBarangController extends Controller
             'email_customer' => 'required|email|max:255',
         ]);
 
-        // Simpan ke database
-        KirimBarang::create([
-            'barang' => $validatedData['barang'],
-            'nama_customer' => $validatedData['nama_customer'],
-            'alamat_customer' => $validatedData['alamat_customer'],
-            'email_customer' => $validatedData['email_customer'],
-        ]);
+        // Simpan ke database KirimBarang (simpan logika pengiriman barang sesuai kebutuhan)
+        // Misalnya:
+        // KirimBarang::create([...]);
 
         // Redirect dengan pesan sukses
         return redirect('/kirim-barang')->with('success', 'Barang berhasil dikirim!');

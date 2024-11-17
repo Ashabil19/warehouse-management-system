@@ -1,5 +1,5 @@
 <?php
-// App\Models\Stock.php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,11 +12,17 @@ class Stock extends Model
     protected $fillable = [
         'id_barangmasuk', 
         'tanggal_masuk', 
-        'jumlah'
+        'jumlah', 
+        'status', // Tambahkan kolom status ke fillable
     ];
 
     public function barangmasuk()
     {
         return $this->belongsTo(BarangMasuk::class, 'id_barangmasuk');
+    }
+
+    public function kirimBarang()
+    {
+        return $this->hasMany(KirimBarang::class, 'id_stock', 'id_stock');
     }
 }

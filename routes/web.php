@@ -3,8 +3,14 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BarangMasukController;
+use App\Http\Controllers\KirimBarangController;
+
+Route::post('/kirim-barang', [KirimBarangController::class, 'store'])->name('kirim.barang');
+Route::get('/kirim-barang', [KirimBarangController::class, 'create'])->name('kirim.barang.create');
 
 
+
+// Route::post('/kirim-barang', [KirimBarangController::class, 'store']);
 
 Route::get('/', function () {
     return view('home');
@@ -12,7 +18,7 @@ Route::get('/', function () {
 
 // routes/web.php
 
-Route::get('/home', function () {
+Route::get('/home', function () {       
     return view('home');
 })->name('home');
 

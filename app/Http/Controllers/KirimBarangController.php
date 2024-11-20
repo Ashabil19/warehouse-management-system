@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Stock; 
 use App\Models\KirimBarang;
 
-
-
 class KirimBarangController extends Controller
 {
     // Halaman Create (Form Kirim Barang)
@@ -63,24 +61,23 @@ class KirimBarangController extends Controller
         }
     }
 
-    // Menampilkan semua data kirimbarang
-    public function index()
-    {
-        // Ambil semua data kirimbarang dengan relasi stock dan barangmasuk
-        $kirimBarang = KirimBarang::with(['stock.barangMasuk'])->get();
+   // Menampilkan semua data kirimbarang
+   public function index()
+   {
+       // Ambil semua data kirimbarang dengan relasi stock dan barangMasuk
+       $kirimBarang = KirimBarang::with(['stock.barangMasuk'])->get();
 
-        // Kirim data ke view
-        return view('barangkeluar.index', compact('kirimBarang'));
-    }
+       // Kirim data ke view
+       return view('barangkeluar.index', compact('kirimBarang'));
+   }
 
+public function showAll()
+{
+    // Ambil semua data kirim_barang beserta relasi yang diperlukan
+    $kirimBarang = KirimBarang::with(['stock.barangMasuk.barang'])->get();
 
-     // Menampilkan data lainnya
-     public function showAll()
-     {
-         $kirimBarang = KirimBarang::with(['stock.barangMasuk'])->get();
-         return view('barangkeluar.showAll', compact('kirimBarang'));
-     }
-    
-    
+    // Kirim data ke view
+    return view('barangkeluar.showAll', compact('kirimBarang'));
+}
 
 }

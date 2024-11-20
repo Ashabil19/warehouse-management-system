@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,4 +19,10 @@ class BarangMasuk extends Model
         'deskripsi_barang',
         'vendor',
     ];
+
+    // Relasi dengan Stock
+    public function stock()
+    {
+        return $this->hasMany(Stock::class, 'id_barangmasuk');
+    }
 }

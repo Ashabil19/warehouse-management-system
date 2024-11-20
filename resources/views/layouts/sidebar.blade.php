@@ -63,10 +63,10 @@
                 </a>
             </li>
 
-             <!-- Kirim Barang Link -->
-             <li>
-                <a href="{{ route('kirimbarang') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg 
-                    {{ request()->routeIs('kirimbarang') ? 'bg-gradient-to-r from-blue-700 to-purple-600 text-white font-semibold' : 'text-gray-800 hover:text-white hover:bg-gray-600' }}">
+           <!-- Kirim Barang Link -->
+            <li>
+                <a href="{{ route('kirimbarang.create') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg 
+                    {{ request()->routeIs('kirimbarang.create') ? 'bg-gradient-to-r from-blue-700 to-purple-600 text-white font-semibold' : 'text-gray-800 hover:text-white hover:bg-gray-600' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M16 2a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h12zm-2 7V7h-2v2H9V7H7v2H5v2h2v2h2v-2h2v2h2v-2h2V9h-2z" clip-rule="evenodd" />
                     </svg>
@@ -76,7 +76,7 @@
 
              <!--  Barang Keluar Link -->
              <li>
-                <a href="{{ route('barangkeluar') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg 
+                <a href="/barangkeluar" class="flex items-center gap-3 px-4 py-2 rounded-lg 
                     {{ request()->routeIs('barangkeluar') ? 'bg-gradient-to-r from-blue-700 to-purple-600 text-white font-semibold' : 'text-gray-800 hover:text-white hover:bg-gray-600' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M16 2a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h12zm-2 7V7h-2v2H9V7H7v2H5v2h2v2h2v-2h2v2h2v-2h2V9h-2z" clip-rule="evenodd" />

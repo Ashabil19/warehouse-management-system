@@ -1,71 +1,47 @@
-<?php
+<?php 
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BarangMasukController;
 use App\Http\Controllers\KirimBarangController;
 
-// ini buat CRUD ke DB 
-// web.php
-Route::post('/kirim-barang', [KirimBarangController::class, 'store'])->name('kirim.barang');
-Route::get('/kirim-barang', [KirimBarangController::class, 'create'])->name('kirim.barang.create');
-
-// Route::get('/kirim-barang', [KirimBarangController::class, 'store']);
-
-Route::get('/', function () {
-    return view('home');
-});
-
-// routes/web.php
-
-Route::get('/home', function () {       
-    return view('home');
+// Route Home
+Route::get('/', function () { 
+    return view('home'); 
 })->name('home');
 
-Route::get('/inputbarang', function () {
-    return view('barangmasuk.create');
+// Route Input Barang
+Route::get('/inputbarang', function () { 
+    return view('barangmasuk.create'); 
 })->name('inputbarang');
 
-// Route::get('/purchasing', function () {
-//     return view('purchasing');
-// })->name('purchasing');
+// Route Barang Masuk
+Route::get('/barangmasuk', [BarangMasukController::class, 'indexBarangMasuk'])->name('barangmasuk.index');
+Route::get('/stock', [BarangMasukController::class, 'indexStock'])->name('stock.index');
+Route::post('/barangmasuk', [BarangMasukController::class, 'store'])->name('barangmasuk.store');
+Route::delete('/barangmasuk/{id}', [BarangMasukController::class, 'destroy'])->name('barangmasuk.destroy');
+Route::post('/barangmasuk/accept/{id}', [BarangMasukController::class, 'accept'])->name('barangmasuk.accept');
+Route::get('/barangmasuk/{id}/details', [BarangMasukController::class, 'getDetails'])->name('barangmasuk.details');
 
-Route::get('/barangmasuk', function () {
-    return view('barangmasuk.index');
-})->name('barangmasuk');
+// Route Kirim Barang (Create dan Store)
+Route::get('/kirimbarang', [KirimBarangController::class, 'create'])->name('kirimbarang.create');
+Route::post('/kirimbarang', [KirimBarangController::class, 'store'])->name('kirimbarang.store');
 
+// Route Barang Keluar (Index)
+Route::get('/barangkeluar', [KirimBarangController::class, 'index'])->name('kirimbarang.index');
+Route::get('/kirim-barang', [KirimBarangController::class, 'showAll'])->name('kirim-barang.showAll');
 
-Route::get('/stock', function () {
-    return view('stock.index');
-})->name('stock');
-
-// Ini route yang benar untuk halaman kirimbarang, menggunakan controller
-Route::get('/kirimbarang', [KirimBarangController::class, 'create'])->name('kirimbarang');
-
-// Route berikutnya mengarahkan ke halaman barangkeluar
-Route::get('/barangkeluar', function () {
-    return view('barangkeluar.index');
-})->name('barangkeluar');
-
-
+// Route Dashboard
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// Middleware untuk Profile
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// ini buat Actions
-// Route::get('/barangmasuk', [BarangMasukController::class, 'index'])->name('barangmasuk.index');
-Route::get('/barangmasuk', [BarangMasukController::class, 'indexBarangMasuk'])->name('barangmasuk.index');
-Route::get('/stock', [BarangMasukController::class, 'indexStock'])->name('stock.index');
-Route::post('/barangmasuk', [BarangMasukController::class, 'store'])->name('barangmasuk.store');
-// Route::get('/barangmasuk', [BarangMasukController::class, 'index'])->name('barangmasuk.index');
-Route::delete('/barangmasuk/{id}', [BarangMasukController::class, 'destroy'])->name('barangmasuk.destroy');
-Route::post('/barangmasuk/accept/{id}', [BarangMasukController::class, 'accept'])->name('barangmasuk.accept');
-Route::get('/barangmasuk/{id}/details', [BarangMasukController::class, 'getDetails'])->name('barangmasuk.details');
-
+// Auth Routes
 require __DIR__.'/auth.php';

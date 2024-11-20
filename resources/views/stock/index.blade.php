@@ -10,6 +10,7 @@
         <th style="text-align: left; padding: 8px; color: #5B3E99;">NO</th>
         <th style="text-align: left; padding: 8px; color: #5B3E99;">Nama Barang</th>
         <th style="text-align: right; padding: 8px; color: #5B3E99;">Jumlah</th>
+        <th style="text-align: right; padding: 8px; color: #5B3E99;">Status</th>
     </tr>
     @foreach ($stocks as $index => $stock)
     <tr style="background-color: {{ $index % 2 == 0 ? '#F3F3F3' : '#FFFFFF' }};">
@@ -21,6 +22,8 @@
             </a>
         </td>
         <td style="padding: 8px; text-align: right; font-weight: bold; font-size: 18px;">{{ $stock->jumlah }}</td>
+        <td style="padding: 8px; text-align: right; font-weight: bold; font-size: 18px;">{{ $stock->status }}</td>
+
     </tr>
     @endforeach
 </table>

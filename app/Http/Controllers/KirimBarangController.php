@@ -3,34 +3,84 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Stock; // Pastikan kamu import model Stock
+use App\Models\Stock; 
+use App\Models\KirimBarang;
+
+
 
 class KirimBarangController extends Controller
 {
+    // Halaman Create (Form Kirim Barang)
     public function create()
     {
-        // Ambil data stock yang dihubungkan dengan barangmasuk
-        $barangList = Stock::with('barangmasuk')->get();
+        // Ambil hanya stock dengan status selain 'dikirim'
+        $barangList = Stock::with('barangmasuk')->where('status', '!=', 'dikirim')->get();
 
-        // Kirimkan data barangList ke view
+        // Kirim data barangList ke view
         return view('barangkeluar.create', compact('barangList'));
     }
 
+    // Menyimpan data barang keluar ke database
     public function store(Request $request)
     {
-        // Validasi data
+        // Validasi input
         $validatedData = $request->validate([
-            'barang' => 'required|string|max:255',
+            'barang_id' => [
+                'required',
+                'exists:stocks,id',
+                function ($attribute, $value, $fail) {
+                    $stock = Stock::find($value);
+                    if ($stock && $stock->status === 'dikirim') {
+                        $fail('Barang ini sudah dikirim dan tidak dapat dipilih lagi.');
+                    }
+                },
+            ],
             'nama_customer' => 'required|string|max:255',
-            'alamat_customer' => 'required|string',
+            'alamat_customer' => 'required|string|max:500',
             'email_customer' => 'required|email|max:255',
         ]);
 
-        // Simpan ke database KirimBarang (simpan logika pengiriman barang sesuai kebutuhan)
-        // Misalnya:
-        // KirimBarang::create([...]);
+        // Simpan data ke tabel KirimBarang
+        try {
+            $kirimBarang = KirimBarang::create([
+                'id_stock' => $validatedData['barang_id'],
+                'nama_customer' => $validatedData['nama_customer'],
+                'alamat_customer' => $validatedData['alamat_customer'],
+                'email_customer' => $validatedData['email_customer'],
+            ]);
 
-        // Redirect dengan pesan sukses
-        return redirect('/kirim-barang')->with('success', 'Barang berhasil dikirim!');
+            // Update status barang menjadi 'dikirim'
+            $stock = Stock::find($validatedData['barang_id']);
+            if ($stock) {
+                $stock->status = 'dikirim';
+                $stock->save();
+            }
+
+            // Redirect dengan pesan sukses
+            return redirect('/barangkeluar')->with('success', 'Barang berhasil dikirim!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan. Coba lagi.');
+        }
     }
+
+    // Menampilkan semua data kirimbarang
+    public function index()
+    {
+        // Ambil semua data kirimbarang dengan relasi stock dan barangmasuk
+        $kirimBarang = KirimBarang::with(['stock.barangMasuk'])->get();
+
+        // Kirim data ke view
+        return view('barangkeluar.index', compact('kirimBarang'));
+    }
+
+
+     // Menampilkan data lainnya
+     public function showAll()
+     {
+         $kirimBarang = KirimBarang::with(['stock.barangMasuk'])->get();
+         return view('barangkeluar.showAll', compact('kirimBarang'));
+     }
+    
+    
+
 }

@@ -1,7 +1,5 @@
 <?php
 
-// app/Models/KirimBarang.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,18 +11,22 @@ class KirimBarang extends Model
 
     protected $table = 'kirimbarang';
 
-    // Kolom yang boleh diisi
     protected $fillable = [
+        'id_stock',
         'nama_customer',
         'alamat_customer',
         'email_customer',
-        'id_stock', // Menggunakan foreign key id_stock
     ];
 
-    // Relasi dengan model Stock
+    // Relasi dengan Stock
     public function stock()
     {
-        return $this->belongsTo(Stock::class, 'id_stock'); // id_stock sebagai foreign key
+        return $this->belongsTo(Stock::class, 'id_stock');
+    }
+
+    // Relasi dengan BarangMasuk
+    public function barangMasuk()
+    {
+        return $this->hasOneThrough(BarangMasuk::class, Stock::class, 'id', 'id_barangmasuk', 'id_stock', 'id');
     }
 }
-

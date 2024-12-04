@@ -16,8 +16,12 @@ Route::get('/inputbarang', function () {
 })->name('inputbarang');
 
 // Route Barang Masuk
+Route::get('/barangmasuk/export', [BarangMasukController::class, 'exportBarangMasuk'])->name('barangmasuk.export');
+
 Route::get('/barangmasuk', [BarangMasukController::class, 'indexBarangMasuk'])->name('barangmasuk.index');
 Route::get('/stock', [BarangMasukController::class, 'indexStock'])->name('stock.index');
+Route::get('/stock/export', [BarangMasukController::class, 'exportStock'])->name('stock.export');
+
 Route::post('/barangmasuk', [BarangMasukController::class, 'store'])->name('barangmasuk.store');
 Route::delete('/barangmasuk/{id}', [BarangMasukController::class, 'destroy'])->name('barangmasuk.destroy');
 Route::post('/barangmasuk/accept/{id}', [BarangMasukController::class, 'accept'])->name('barangmasuk.accept');
@@ -26,6 +30,8 @@ Route::get('/barangmasuk/{id}/details', [BarangMasukController::class, 'getDetai
 // Route Kirim Barang (Create dan Store)
 Route::get('/kirimbarang', [KirimBarangController::class, 'create'])->name('kirimbarang.create');
 Route::post('/kirimbarang', [KirimBarangController::class, 'store'])->name('kirimbarang.store');
+Route::get('/kirimbarang/export', [BarangMasukController::class, 'exportKirimBarang'])->name('kirimbarang.export');
+
 
 // Route Barang Keluar (Index)
 Route::get('/barangkeluar', [KirimBarangController::class, 'index'])->name('kirimbarang.index');

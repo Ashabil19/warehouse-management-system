@@ -5,6 +5,11 @@
 @section('content')
 <div class="p-10 bg-gray-100 min-h-screen">
     <h1 class="text-2xl font-semibold text-gray-800 mb-4">Detail Kirim Barang</h1>
+    <div class="flex justify-end mb-4">
+        <a href="{{ route('kirimbarang.export') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg">
+            Export to Excel
+        </a>
+    </div>
     
     <table class="min-w-full bg-white border border-gray-200">
         <thead>

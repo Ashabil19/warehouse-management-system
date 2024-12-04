@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\BarangMasukExport;
+use App\Exports\KirimBarangExport;
+
 
 use Illuminate\Http\Request;
 use App\Models\BarangMasuk;
@@ -77,7 +81,21 @@ class BarangMasukController extends Controller
             'harga_beli' => 'Rp ' . number_format($barang->harga_beli, 0, ',', '.')
         ]);
     }
+    public function exportBarangMasuk()
+    {
+        return Excel::download(new BarangMasukExport, 'barang_masuk.xlsx');
+    }
 
+    public function exportStock()
+{
+    return Excel::download(new \App\Exports\StockExport, 'stock.xlsx');
+}
+
+
+public function exportKirimBarang()
+{
+    return Excel::download(new KirimBarangExport, 'kirim_barang.xlsx');
+}
 
     
 

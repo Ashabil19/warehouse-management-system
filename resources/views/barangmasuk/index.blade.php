@@ -6,6 +6,11 @@
 @section('content')
 
     <h1 class="text-right text-[#5B3E99] font-bold">BARANG MASUK</h1>
+    <div class="flex justify-end mb-4">
+        <a href="{{ route('barangmasuk.export') }}" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+            Export to Excel
+        </a>
+    </div>
 
     <table class="w-full mt-5 border-collapse">
         <thead>

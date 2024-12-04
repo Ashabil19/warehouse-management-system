@@ -53,13 +53,14 @@
             </li>
 
              <!-- Stock Link -->
+            
              <li>
-                <a href="{{ route('stock.index') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg 
-                    {{ request()->routeIs('stock') ? 'bg-gradient-to-r from-blue-700 to-purple-600 text-white font-semibold' : 'text-gray-800 hover:text-white hover:bg-gray-600' }}">
+                <a href="{{ route('stock.index') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg font-semibold 
+                    {{ request()->routeIs('stock.index') ? 'bg-gradient-to-r from-blue-700 to-purple-600 text-white' : 'text-gray-800 hover:text-white hover:bg-gray-600' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M16 2a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h12zm-2 7V7h-2v2H9V7H7v2H5v2h2v2h2v-2h2v2h2v-2h2V9h-2z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-7a1 1 0 10-2 0v2a1 1 0 102 0v-2zm-1-3a1 1 0 110-2 1 1 0 010 2z" clip-rule="evenodd" />
                     </svg>
-                    Stock
+                    Stock Barang
                 </a>
             </li>
 

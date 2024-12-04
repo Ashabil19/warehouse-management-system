@@ -8,27 +8,20 @@ use Carbon\Carbon; // Pastikan untuk mengimport Carbon jika belum
 use App\Models\Stock; // Pastikan Stock di-import
 
 
-
 class BarangMasukController extends Controller
 {
-
     public function indexBarangMasuk()
     {
         $barangMasuk = BarangMasuk::all(); // Retrieve all data from BarangMasuk
         return view('barangmasuk.index', compact('barangMasuk'));
     }
-    
     public function indexStock()
     {
         $stocks = Stock::all(); // Retrieve all data from Stock
         return view('stock.index', compact('stocks'));
     }
-    
-
-
     public function store(Request $request)
-    {
-        // Validasi input
+    {   // Validasi input
         $request->validate([
             'kode_barang' => 'required|unique:barang_masuk',
             'nama_barang' => 'required',
@@ -53,37 +46,28 @@ class BarangMasukController extends Controller
         // Redirect atau return response
         return redirect()->back()->with('success', 'Barang berhasil ditambahkan');
     }
-
     public function destroy($id)
     {
         $barang = BarangMasuk::findOrFail($id);
         $barang->delete();
-
         return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil dihapus.');
     }
-
-
     public function accept($id)
     {
         $barangMasuk = BarangMasuk::findOrFail($id);
-        
         Stock::create([
             'id_barangmasuk' => $barangMasuk->id,
             'tanggal_masuk' => now(),
             'jumlah' => $barangMasuk->kuantiti,
         ]);
-
         // Update status di tabel barang_masuk
         $barangMasuk->status = 'accepted';
         $barangMasuk->save(); // Explicitly save to ensure persistence
-
         return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil dipindahkan ke stok');
     }
-
     public function getDetails($id)
     {
         $barang = BarangMasuk::findOrFail($id);
-
         return response()->json([
             'kode_barang' => $barang->kode_barang,
             'nama_barang' => $barang->nama_barang,

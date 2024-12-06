@@ -19,9 +19,15 @@ class BarangMasukController extends Controller
         $barangMasuk = BarangMasuk::all(); // Retrieve all data from BarangMasuk
         return view('barangmasuk.index', compact('barangMasuk'));
     }
+    // public function indexStock()
+    // {
+    //     $stocks = Stock::all(); // Retrieve all data from Stock
+    //     return view('stock.index', compact('stocks'));
+    // }
+
     public function indexStock()
     {
-        $stocks = Stock::all(); // Retrieve all data from Stock
+        $stocks = Stock::orderBy('created_at', 'desc')->get(); // Mengurutkan dari terbaru
         return view('stock.index', compact('stocks'));
     }
     public function store(Request $request)

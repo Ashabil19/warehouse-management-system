@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BarangMasukController;
 use App\Http\Controllers\KirimBarangController;
+use App\Http\Controllers\VendorController; // Pastikan ini ada
 use App\Http\Middleware\RoleMiddleware;
 
 // Route Home
@@ -11,17 +12,26 @@ Route::get('/', function () {
     return view('home'); 
 })->name('home');
 
+// Route Vendor tanpa middleware auth
+Route::get('/vendor', [VendorController::class, 'index'])->name('vendor.index');
+Route::get('/vendor/create', [VendorController::class, 'create'])->name('vendor.create');
+Route::post('/vendor', [VendorController::class, 'store'])->name('vendor.store');
+Route::get('/vendor/{id}/edit', [VendorController::class, 'edit'])->name('vendor.edit');
+Route::put('/vendor/{id}', [VendorController::class, 'update'])->name('vendor.update');
+Route::delete('/vendor/{id}', [VendorController::class, 'destroy'])->name('vendor.destroy');
+
 // Routes with auth middleware
 Route::middleware(['auth'])->group(function () {
     // Route untuk role 'purchasing'
     Route::middleware([RoleMiddleware::class . ':purchasing'])->group(function () {
-        Route::get('/inputbarang', function () { 
-            return view('barangmasuk.create'); 
-        })->name('inputbarang');
+
+
+        Route::get('/inputbarang', [BarangMasukController::class, 'create'])->name('inputbarang');
+
     });
 
     // Route untuk role 'logistik'
-    Route::middleware([RoleMiddleware::class . ':logistik'])->group(function () {
+    Route::middleware([RoleMiddleware::class . ':purchasing'])->group(function () {
         Route::get('/barangmasuk', [BarangMasukController::class, 'indexBarangMasuk'])->name('barangmasuk.index');
         Route::get('/stock', [BarangMasukController::class, 'indexStock'])->name('stock.index');
         Route::get('/kirimbarang', [KirimBarangController::class, 'create'])->name('kirimbarang.create');
@@ -30,7 +40,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Route untuk role 'sales'
-    Route::middleware([RoleMiddleware::class . ':sales'])->group(function () {
+    Route::middleware([RoleMiddleware::class . ':purchasing'])->group(function () {
         Route::get('/barangkeluar', [KirimBarangController::class, 'index'])->name('kirimbarang.index');
     });
 

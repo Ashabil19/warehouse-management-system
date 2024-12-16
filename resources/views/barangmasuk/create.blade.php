@@ -45,11 +45,17 @@
                 <textarea name="deskripsi_barang" rows="5" class="w-full px-4 py-2 bg-[#CBC3DC] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
             </div>
 
-            <!-- Vendor -->
+           <!-- Vendor -->
             <div>
                 <label class="block text-gray-600 mb-2">Vendor</label>
-                <input type="text" name="vendor" class="w-full px-4 py-2 bg-[#CBC3DC] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <select name="vendor" class="w-full px-4 py-2 bg-[#CBC3DC] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <option value="">Pilih Vendor</option>
+                    @foreach ($vendors as $vendor)
+                        <option value="{{ $vendor->id }}">{{ $vendor->name }}</option>
+                    @endforeach
+                </select>
             </div>
+
         </div>
 
         <!-- Submit Button -->

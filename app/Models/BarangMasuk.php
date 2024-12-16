@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -8,8 +9,10 @@ class BarangMasuk extends Model
 {
     use HasFactory;
 
+    // Nama tabel yang digunakan oleh model ini
     protected $table = 'barang_masuk';
 
+    // Kolom yang dapat diisi secara massal
     protected $fillable = [
         'kode_barang',
         'harga_beli',
@@ -17,12 +20,18 @@ class BarangMasuk extends Model
         'kategori',
         'kuantiti',
         'deskripsi_barang',
-        'vendor',
+        'vendor_id', // Pastikan ini sesuai dengan kolom di tabel
     ];
 
     // Relasi dengan Stock
     public function stock()
     {
-        return $this->hasMany(Stock::class, 'id_barangmasuk');
+        return $this->hasMany(Stock::class, 'id_barangmasuk'); // Pastikan 'id_barangmasuk' sesuai dengan kolom di tabel stock
+    }
+
+    // Relasi dengan Vendor
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class, 'vendor_id'); // Pastikan 'vendor_id' sesuai dengan kolom di tabel barang_masuk
     }
 }

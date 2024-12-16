@@ -30,6 +30,17 @@
         </a>
     </li>
 
+     <!-- Vendor Link -->
+     <li>
+        <a href="{{ route('vendor.index') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg 
+            {{ request()->routeIs('vendor.*') ? 'bg-gradient-to-r from-blue-700 to-purple-600 text-white font-semibold' : 'text-gray-800 hover:text-white hover:bg-gray-600' }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-7a1 1 0 10-2 0v2a1 1 0 102 0v-2zm-1-3a1 1 0 110-2 1 1 0 010 2z" clip-rule="evenodd" />
+            </svg>
+            Vendor
+        </a>
+    </li>
+
     <li>
         <a href="{{ route('inputbarang') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg font-semibold 
             {{ request()->routeIs('inputbarang') ? 'bg-gradient-to-r from-blue-700 to-purple-600 text-white' : 'text-gray-800 hover:text-white hover:bg-gray-600' }}">
@@ -84,16 +95,7 @@
         </a>
     </li>
 
-    <!-- Vendor Link -->
-    <li>
-        <a href="{{ route('vendor.index') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg 
-            {{ request()->routeIs('vendor.*') ? 'bg-gradient-to-r from-blue-700 to-purple-600 text-white font-semibold' : 'text-gray-800 hover:text-white hover:bg-gray-600' }}">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-7a1 1 0 10-2 0v2a1 1 0 102 0v-2zm-1-3a1 1 0 110-2 1 1 0 010 2z" clip-rule="evenodd" />
-            </svg>
-            Vendor
-        </a>
-    </li>
+   
 </ul>
 
 

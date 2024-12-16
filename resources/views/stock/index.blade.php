@@ -24,7 +24,7 @@
             <tr style="background-color: {{ $index % 2 == 0 ? '#F3F3F3' : '#FFFFFF' }};">
                 <td style="padding: 8px; width: 50px;">{{ $index + 1 }}.</td>
                 <td style="padding: 8px;">
-                    <p style="font-weight: bold;"> {{ $stock->barangmasuk->kode_barang }} {{ $stock->barangmasuk->nama_barang }}</p>
+                    <p style="font-weight: bold;"> {{ $stock->barangmasuk->kode_barang }} | {{ $stock->barangmasuk->nama_barang }}</p>
                     <a href="#" style="display: inline-block; padding: 5px 15px; background-color: #E0E0F8; color: #5B3E99; border: 1px solid #5B3E99; border-radius: 5px; font-weight: bold; text-decoration: none;">
                         Stok Barang
                     </a>

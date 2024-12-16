@@ -17,6 +17,12 @@ class BarangMasukController extends Controller
         $barangMasuk = BarangMasuk::all(); // Retrieve all data from BarangMasuk
         return view('barangmasuk.index', compact('barangMasuk'));
     }
+    public function indexStock()
+    {
+        // Ambil data stok dari model Stock
+        $stocks = Stock::all(); // Atau sesuaikan dengan logika yang kamu butuhkan
+        return view('stock.index', compact('stocks')); // Pastikan ada view yang sesuai
+    }
 
     public function create()
     {
@@ -55,24 +61,26 @@ class BarangMasukController extends Controller
     //     return redirect()->back()->with('success', 'Barang berhasil ditambahkan');
     // }
     public function store(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'kode_barang' => 'required|unique:barang_masuk',
-            'nama_barang' => 'required',
-            'kategori' => 'required',
-            'harga_beli' => 'required|integer',
-            'kuantiti' => 'required|integer',
-            'deskripsi_barang' => 'nullable',
-            'vendor_id' => 'required|exists:vendors,id',
-        ]);
-    
-        // Simpan data ke database
-        BarangMasuk::create($request->all());
-    
-        // Redirect kembali ke halaman input barang
-        return redirect()->back()->with('success', 'Barang berhasil ditambahkan');
-    }
+{
+    // Validasi input
+    $request->validate([
+        'kode_barang' => 'required|unique:barang_masuk',
+        'nama_barang' => 'required',
+        'kategori' => 'required',
+        'harga_beli' => 'required|integer',
+        'kuantiti' => 'required|integer',
+        'deskripsi_barang' => 'nullable',
+        'vendor' => 'required|exists:vendors,id', // Pastikan ini sesuai dengan kolom di database
+    ]);
+
+    // Simpan data ke database
+    BarangMasuk::create($request->all());
+
+    // Redirect kembali ke halaman input barang
+    return redirect()->back()->with('success', 'Barang berhasil ditambahkan');
+}
+
+ 
     
 
     

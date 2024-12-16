@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BarangMasukController;
 use App\Http\Controllers\KirimBarangController;
-use App\Http\Controllers\VendorController; // Pastikan ini ada
+use App\Http\Controllers\VendorController; 
 use App\Http\Middleware\RoleMiddleware;
 
 // Route Home
@@ -24,10 +24,8 @@ Route::delete('/vendor/{id}', [VendorController::class, 'destroy'])->name('vendo
 Route::middleware(['auth'])->group(function () {
     // Route untuk role 'purchasing'
     Route::middleware([RoleMiddleware::class . ':purchasing'])->group(function () {
-
-
         Route::get('/inputbarang', [BarangMasukController::class, 'create'])->name('inputbarang');
-
+        Route::post('/barangmasuk', [BarangMasukController::class, 'store'])->name('barangmasuk.store');
     });
 
     // Route untuk role 'logistik'
@@ -37,20 +35,19 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/kirimbarang', [KirimBarangController::class, 'create'])->name('kirimbarang.create');
         Route::post('/kirimbarang', [KirimBarangController::class, 'store'])->name('kirimbarang.store');
         Route::get('/kirimbarang/export', [KirimBarangController::class, 'export'])->name('kirimbarang.export');
+        
+        Route::get('/barangmasuk/export', [BarangMasukController::class, 'exportBarangMasuk'])->name('barangmasuk.export');
+        Route::get('/stock', [BarangMasukController::class, 'indexStock'])->name('stock.index');
+        Route::get('/stock/export', [BarangMasukController::class, 'exportStock'])->name('stock.export');
+        Route::delete('/barangmasuk/{id}', [BarangMasukController::class, 'destroy'])->name('barangmasuk.destroy');
+        Route::post('/barangmasuk/accept/{id}', [BarangMasukController::class, 'accept'])->name('barangmasuk.accept');
+        Route::get('/barangmasuk/{id}/details', [BarangMasukController::class, 'getDetails'])->name('barangmasuk.details');
     });
 
     // Route untuk role 'sales'
     Route::middleware([RoleMiddleware::class . ':purchasing'])->group(function () {
         Route::get('/barangkeluar', [KirimBarangController::class, 'index'])->name('kirimbarang.index');
     });
-
-    // Route lainnya yang tidak boleh diakses oleh role lain
-    Route::get('/barangmasuk/export', [BarangMasukController::class, 'exportBarangMasuk'])->name('barangmasuk.export')->middleware([RoleMiddleware::class . ':logistik']);
-    Route::get('/stock/export', [BarangMasukController::class, 'exportStock'])->name('stock.export')->middleware([RoleMiddleware::class . ':logistik']);
-    Route::post('/barangmasuk', [BarangMasukController::class, 'store'])->name('barangmasuk.store')->middleware([RoleMiddleware::class . ':logistik']);
-    Route::delete('/barangmasuk/{id}', [BarangMasukController::class, 'destroy'])->name('barangmasuk.destroy')->middleware([RoleMiddleware::class . ':logistik']);
-    Route::post('/barangmasuk/accept/{id}', [BarangMasukController::class, 'accept'])->name('barangmasuk.accept')->middleware([RoleMiddleware::class . ':logistik']);
-    Route::get('/barangmasuk/{id}/details', [BarangMasukController::class, 'getDetails'])->name('barangmasuk.details')->middleware([RoleMiddleware::class . ':logistik']);
 
     // Route Dashboard
     Route::get('/dashboard', function () {

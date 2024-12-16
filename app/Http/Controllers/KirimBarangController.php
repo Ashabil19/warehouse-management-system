@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Stock; 
 use App\Models\KirimBarang;
+use Maatwebsite\Excel\Facades\Excel; // Pastikan ini diimpor
+use App\Exports\KirimBarangExport; // Pastikan ini diimpor
+
 
 class KirimBarangController extends Controller
 {
@@ -80,4 +83,10 @@ public function showAll()
     return view('barangkeluar.showAll', compact('kirimBarang'));
 }
 
+
+
+public function export()
+{
+    return Excel::download(new KirimBarangExport, 'kirim_barang.xlsx');
+}
 }

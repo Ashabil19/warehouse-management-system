@@ -30,7 +30,11 @@
             <!-- Kategori -->
             <div>
                 <label class="block text-gray-600 mb-2">Kategori</label>
-                <input type="text" name="kategori" class="w-full px-4 py-2 bg-[#CBC3DC] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <select name="kategori" class="w-full px-4 py-2 bg-[#CBC3DC] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <option value="">Pilih Kategori</option>
+                    <option value="Consumable">Consumable</option>
+                    <option value="Stock">Stock</option>
+                </select>
             </div>
 
             <!-- Kuantiti -->
@@ -45,7 +49,7 @@
                 <textarea name="deskripsi_barang" rows="5" class="w-full px-4 py-2 bg-[#CBC3DC] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
             </div>
 
-           <!-- Vendor -->
+            <!-- Vendor -->
             <div>
                 <label class="block text-gray-600 mb-2">Vendor</label>
                 <select name="vendor" class="w-full px-4 py-2 bg-[#CBC3DC] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
@@ -55,7 +59,6 @@
                     @endforeach
                 </select>
             </div>
-
         </div>
 
         <!-- Submit Button -->

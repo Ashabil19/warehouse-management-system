@@ -20,7 +20,7 @@ class BarangMasuk extends Model
         'kategori',
         'kuantiti',
         'deskripsi_barang',
-        'vendor_id', // Pastikan ini sesuai dengan kolom di tabel
+        'vendor', // Pastikan ini sesuai dengan kolom di tabel
     ];
 
     // Relasi dengan Stock
@@ -32,6 +32,6 @@ class BarangMasuk extends Model
     // Relasi dengan Vendor
     public function vendor()
     {
-        return $this->belongsTo(Vendor::class, 'vendor_id'); // Pastikan 'vendor_id' sesuai dengan kolom di tabel barang_masuk
+        return $this->belongsTo(Vendor::class, 'vendor'); // Pastikan 'vendor' sesuai dengan kolom di tabel barang_masuk
     }
 }

@@ -7,8 +7,8 @@ use App\Exports\BarangMasukExport;
 use App\Exports\KirimBarangExport;
 use Illuminate\Http\Request;
 use App\Models\BarangMasuk;
-use App\Models\Vendor; // Pastikan untuk mengimpor model Vendor
-use App\Models\Stock; // Pastikan Stock di-import
+use App\Models\Vendor;
+use App\Models\Stock;
 
 class BarangMasukController extends Controller
 {
@@ -17,11 +17,11 @@ class BarangMasukController extends Controller
         $barangMasuk = BarangMasuk::all(); // Retrieve all data from BarangMasuk
         return view('barangmasuk.index', compact('barangMasuk'));
     }
+
     public function indexStock()
     {
-        // Ambil data stok dari model Stock
-        $stocks = Stock::all(); // Atau sesuaikan dengan logika yang kamu butuhkan
-        return view('stock.index', compact('stocks')); // Pastikan ada view yang sesuai
+        $stocks = Stock::all(); // Ambil data stok dari model Stock
+        return view('stock.index', compact('stocks'));
     }
 
     public function create()
@@ -30,61 +30,28 @@ class BarangMasukController extends Controller
         return view('barangmasuk.create', compact('vendors'));
     }
 
-    // public function store(Request $request)
-    // {
-    //     // Log semua data yang diterima
-    //     \Log::info('Data yang diterima:', $request->all());
-    
-    //     // Validasi input
-    //     $request->validate([
-    //         'kode_barang' => 'required|unique:barang_masuk',
-    //         'nama_barang' => 'required',
-    //         'kategori' => 'required',
-    //         'harga_beli' => 'required|integer',
-    //         'kuantiti' => 'required|integer',
-    //         'deskripsi_barang' => 'nullable',
-    //         'vendor' => 'required|integer|exists:vendors,id', // Pastikan ini sesuai dengan kolom di database
-    //     ]);
-    
-    //     // Simpan data ke database
-    //     BarangMasuk::create([
-    //         'kode_barang' => $request->kode_barang,
-    //         'nama_barang' => $request->nama_barang,
-    //         'kategori' => $request->kategori,
-    //         'harga_beli' => $request->harga_beli,
-    //         'kuantiti' => $request->kuantiti,
-    //         'deskripsi_barang' => $request->deskripsi_barang,
-    //         'vendor' => $request->vendor, // Pastikan ini sesuai dengan kolom di database
-    //     ]);
-    
-    //     // Redirect atau return response
-    //     return redirect()->back()->with('success', 'Barang berhasil ditambahkan');
-    // }
     public function store(Request $request)
-{
-    // Validasi input
-    $request->validate([
-        'kode_barang' => 'required|unique:barang_masuk',
-        'nama_barang' => 'required',
-        'kategori' => 'required',
-        'harga_beli' => 'required|integer',
-        'kuantiti' => 'required|integer',
-        'deskripsi_barang' => 'nullable',
-        'vendor' => 'required|exists:vendors,id', // Pastikan ini sesuai dengan kolom di database
-    ]);
+    {
+        // Log semua data yang diterima
+        \Log::info('Data yang diterima:', $request->all());
 
-    // Simpan data ke database
-    BarangMasuk::create($request->all());
+        // Validasi input
+        $request->validate([
+            'kode_barang' => 'required|unique:barang_masuk',
+            'nama_barang' => 'required',
+            'kategori' => 'required',
+            'harga_beli' => 'required|integer',
+            'kuantiti' => 'required|integer',
+            'deskripsi_barang' => 'nullable',
+            'vendor' => 'required|exists:vendors,id',
+        ]);
 
-    // Redirect kembali ke halaman input barang
-    return redirect()->back()->with('success', 'Barang berhasil ditambahkan');
-}
+        // Simpan data ke database
+        BarangMasuk::create($request->all());
 
- 
-    
-
-    
-    
+        // Redirect kembali ke halaman input barang
+        return redirect()->back()->with('success', 'Barang berhasil ditambahkan');
+    }
 
     public function edit($id)
     {
@@ -103,20 +70,12 @@ class BarangMasukController extends Controller
             'harga_beli' => 'required|integer',
             'kuantiti' => 'required|integer',
             'deskripsi_barang' => 'nullable',
-            'vendor_id' => 'required|exists:vendors,id', // Validasi vendor_id
+            'vendor_id' => 'required|exists:vendors,id',
         ]);
 
         // Temukan barang dan perbarui data
         $barang = BarangMasuk::findOrFail($id);
-        $barang->update([
-            'kode_barang' => $request->kode_barang,
-            'nama_barang' => $request->nama_barang,
-            'kategori' => $request->kategori,
-            'harga_beli' => $request->harga_beli,
-            'kuantiti' => $request->kuantiti,
-            'deskripsi_barang' => $request->deskripsi_barang,
-            'vendor_id' => $request->vendor_id, // Simpan vendor_id
-        ]);
+        $barang->update($request->all());
 
         return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil diperbarui.');
     }
@@ -136,7 +95,6 @@ class BarangMasukController extends Controller
             'tanggal_masuk' => now(),
             'jumlah' => $barangMasuk->kuantiti,
         ]);
-        // Update status di tabel barang_masuk
         $barangMasuk->status = 'accepted';
         $barangMasuk->save(); // Explicitly save to ensure persistence
         return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil dipindahkan ke stok');
@@ -157,16 +115,16 @@ class BarangMasukController extends Controller
 
     public function exportBarangMasuk()
     {
-        return Excel::download(new BarangMasukExport, 'barang_masuk.xlsx');
+        return Excel::download(new BarangMasukExport, 'laporan_pembelian.xlsx');
     }
 
     public function exportStock()
     {
-        return Excel::download(new \App\Exports\StockExport, 'stock.xlsx');
+        return Excel::download(new \App\Exports\StockExport, 'laporan_stock.xlsx');
     }
 
     public function exportKirimBarang()
     {
-        return Excel::download(new KirimBarangExport, 'kirim_barang.xlsx');
+        return Excel::download(new KirimBarangExport, 'laporan_pengiriman.xlsx');
     }
 }

@@ -5,23 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Stock; 
 use App\Models\KirimBarang;
-use Maatwebsite\Excel\Facades\Excel; // Pastikan ini diimpor
-use App\Exports\KirimBarangExport; // Pastikan ini diimpor
-
+use Maatwebsite\Excel\Facades\Excel; 
+use App\Exports\KirimBarangExport; 
 
 class KirimBarangController extends Controller
 {
-    // Halaman Create (Form Kirim Barang)
     public function create()
     {
         // Ambil hanya stock dengan status selain 'dikirim'
         $barangList = Stock::with('barangmasuk')->where('status', '!=', 'dikirim')->get();
-
-        // Kirim data barangList ke view
         return view('barangkeluar.create', compact('barangList'));
     }
 
-    // Menyimpan data barang keluar ke database
     public function store(Request $request)
     {
         // Validasi input
@@ -39,6 +34,7 @@ class KirimBarangController extends Controller
             'nama_customer' => 'required|string|max:255',
             'alamat_customer' => 'required|string|max:500',
             'email_customer' => 'required|email|max:255',
+            'jumlah' => 'required|integer|min:1', // Validasi jumlah
         ]);
 
         // Simpan data ke tabel KirimBarang
@@ -50,11 +46,17 @@ class KirimBarangController extends Controller
                 'email_customer' => $validatedData['email_customer'],
             ]);
 
-            // Update status barang menjadi 'dikirim'
+            // Update status barang menjadi 'dikirim' dan kurangi jumlah stok
             $stock = Stock::find($validatedData['barang_id']);
             if ($stock) {
-                $stock->status = 'dikirim';
-                $stock->save();
+                // Pastikan jumlah yang diminta tidak melebihi stok yang ada
+                if ($validatedData['jumlah'] > $stock->jumlah) {
+                    return redirect()->back()->with('error', 'Jumlah yang diminta melebihi stok yang tersedia.');
+                }
+
+                $stock->jumlah -= $validatedData['jumlah']; // Kurangi jumlah stok
+                $stock->status = 'dikirim'; // Update status
+                $stock->save(); // Simpan perubahan
             }
 
             // Redirect dengan pesan sukses
@@ -64,29 +66,20 @@ class KirimBarangController extends Controller
         }
     }
 
-   // Menampilkan semua data kirimbarang
-   public function index()
-   {
-       // Ambil semua data kirimbarang dengan relasi stock dan barangMasuk
-       $kirimBarang = KirimBarang::with(['stock.barangMasuk'])->get();
+    public function index()
+    {
+        $kirimBarang = KirimBarang::with(['stock.barangMasuk'])->get();
+        return view('barangkeluar.index', compact('kirimBarang'));
+    }
 
-       // Kirim data ke view
-       return view('barangkeluar.index', compact('kirimBarang'));
-   }
+    public function showAll()
+    {
+        $kirimBarang = KirimBarang::with(['stock.barangMasuk.barang'])->get();
+        return view('barangkeluar.showAll', compact('kirimBarang'));
+    }
 
-public function showAll()
-{
-    // Ambil semua data kirim_barang beserta relasi yang diperlukan
-    $kirimBarang = KirimBarang::with(['stock.barangMasuk.barang'])->get();
-
-    // Kirim data ke view
-    return view('barangkeluar.showAll', compact('kirimBarang'));
-}
-
-
-
-public function export()
-{
-    return Excel::download(new KirimBarangExport, 'kirim_barang.xlsx');
-}
+    public function export()
+    {
+        return Excel::download(new KirimBarangExport, 'kirim_barang.xlsx');
+    }
 }

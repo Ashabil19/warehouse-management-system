@@ -12,7 +12,6 @@ class BarangMasuk extends Model
     // Nama tabel yang digunakan oleh model ini
     protected $table = 'barang_masuk';
 
-    
     // Kolom yang dapat diisi secara massal
     protected $fillable = [
         'kode_barang',

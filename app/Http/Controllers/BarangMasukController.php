@@ -17,11 +17,11 @@ class BarangMasukController extends Controller
         $barangMasuk = BarangMasuk::all(); // Retrieve all data from BarangMasuk
         return view('barangmasuk.index', compact('barangMasuk'));
     }
+
     public function indexStock()
     {
-        // Ambil data stok dari model Stock
-        $stocks = Stock::all(); // Atau sesuaikan dengan logika yang kamu butuhkan
-        return view('stock.index', compact('stocks')); // Pastikan ada view yang sesuai
+        $stocks = Stock::all(); // Ambil data stok dari model Stock
+        return view('stock.index', compact('stocks'));
     }
 
     public function create()
@@ -30,61 +30,31 @@ class BarangMasukController extends Controller
         return view('barangmasuk.create', compact('vendors'));
     }
 
-    // public function store(Request $request)
-    // {
-    //     // Log semua data yang diterima
-    //     \Log::info('Data yang diterima:', $request->all());
-    
-    //     // Validasi input
-    //     $request->validate([
-    //         'kode_barang' => 'required|unique:barang_masuk',
-    //         'nama_barang' => 'required',
-    //         'kategori' => 'required',
-    //         'harga_beli' => 'required|integer',
-    //         'kuantiti' => 'required|integer',
-    //         'deskripsi_barang' => 'nullable',
-    //         'vendor' => 'required|integer|exists:vendors,id', // Pastikan ini sesuai dengan kolom di database
-    //     ]);
-    
-    //     // Simpan data ke database
-    //     BarangMasuk::create([
-    //         'kode_barang' => $request->kode_barang,
-    //         'nama_barang' => $request->nama_barang,
-    //         'kategori' => $request->kategori,
-    //         'harga_beli' => $request->harga_beli,
-    //         'kuantiti' => $request->kuantiti,
-    //         'deskripsi_barang' => $request->deskripsi_barang,
-    //         'vendor' => $request->vendor, // Pastikan ini sesuai dengan kolom di database
-    //     ]);
-    
-    //     // Redirect atau return response
-    //     return redirect()->back()->with('success', 'Barang berhasil ditambahkan');
-    // }
     public function store(Request $request)
-{
-    // Validasi input
-    $request->validate([
-        'kode_barang' => 'required|unique:barang_masuk',
-        'nama_barang' => 'required',
-        'kategori' => 'required',
-        'harga_beli' => 'required|integer',
-        'kuantiti' => 'required|integer',
-        'deskripsi_barang' => 'nullable',
-        'vendor' => 'required|exists:vendors,id', // Pastikan ini sesuai dengan kolom di database
-    ]);
+    {
+        // Validasi input
+        $request->validate([
+            'kode_barang' => 'required|unique:barang_masuk',
+            'nama_barang' => 'required',
+            'kategori' => 'required',
+            'harga_beli' => 'required|integer',
+            'kuantiti' => 'required|integer',
+            'deskripsi_barang' => 'nullable',
+            'vendor' => 'required|exists:vendors,id', // Pastikan ini sesuai dengan kolom di database
+            'tipe_barang' => 'nullable|string', // Validasi untuk tipe_barang
+            'serial_number' => 'nullable|string', // Validasi untuk serial_number
+            'tempat_penyimpanan' => 'nullable|string', // Validasi untuk tempat_penyimpanan
+        ]);
 
-    // Simpan data ke database
-    BarangMasuk::create($request->all());
+        // Simpan data ke database
+        $data = $request->all();
+        $data['tanggal_masuk'] = now(); // Set tanggal masuk ke timestamp saat ini
 
-    // Redirect kembali ke halaman input barang
-    return redirect()->back()->with('success', 'Barang berhasil ditambahkan');
-}
+        BarangMasuk::create($data);
 
- 
-    
-
-    
-    
+        // Redirect kembali ke halaman input barang
+        return redirect()->back()->with('success', 'Barang berhasil ditambahkan');
+    }
 
     public function edit($id)
     {
@@ -103,29 +73,17 @@ class BarangMasukController extends Controller
             'harga_beli' => 'required|integer',
             'kuantiti' => 'required|integer',
             'deskripsi_barang' => 'nullable',
-            'vendor_id' => 'required|exists:vendors,id', // Validasi vendor_id
+            'vendor' => 'required|exists:vendors,id', // Validasi vendor
+            'tipe_barang' => 'nullable|string', // Validasi untuk tipe_barang
+            'serial_number' => 'nullable|string', // Validasi untuk serial_number
+            'tempat_penyimpanan' => 'nullable|string', // Validasi untuk tempat_penyimpanan
         ]);
 
         // Temukan barang dan perbarui data
         $barang = BarangMasuk::findOrFail($id);
-        $barang->update([
-            'kode_barang' => $request->kode_barang,
-            'nama_barang' => $request->nama_barang,
-            'kategori' => $request->kategori,
-            'harga_beli' => $request->harga_beli,
-            'kuantiti' => $request->kuantiti,
-            'deskripsi_barang' => $request->deskripsi_barang,
-            'vendor_id' => $request->vendor_id, // Simpan vendor_id
-        ]);
+        $barang->update($request->all());
 
         return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil diperbarui.');
-    }
-
-    public function destroy($id)
-    {
-        $barang = BarangMasuk::findOrFail($id);
-        $barang->delete();
-        return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil dihapus.');
     }
 
     public function accept($id)
@@ -142,17 +100,19 @@ class BarangMasukController extends Controller
         return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil dipindahkan ke stok');
     }
 
-    public function getDetails($id)
+    public function reject($id)
+    {
+        $barangMasuk = BarangMasuk::findOrFail($id);
+        $barangMasuk->status = 'rejected';
+        $barangMasuk->save();
+        return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil ditolak.');
+    }
+
+    public function destroy($id)
     {
         $barang = BarangMasuk::findOrFail($id);
-        return response()->json([
-            'kode_barang' => $barang->kode_barang,
-            'nama_barang' => $barang->nama_barang,
-            'kuantiti' => $barang->kuantiti,
-            'vendor' => $barang->vendor,
-            'kategori' => $barang->kategori,
-            'harga_beli' => 'Rp ' . number_format($barang->harga_beli, 0, ',', '.')
-        ]);
+        $barang->delete();
+        return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil dihapus.');
     }
 
     public function exportBarangMasuk()
@@ -160,13 +120,24 @@ class BarangMasukController extends Controller
         return Excel::download(new BarangMasukExport, 'barang_masuk.xlsx');
     }
 
-    public function exportStock()
-    {
-        return Excel::download(new \App\Exports\StockExport, 'stock.xlsx');
-    }
-
     public function exportKirimBarang()
     {
         return Excel::download(new KirimBarangExport, 'kirim_barang.xlsx');
+    }
+
+    public function getDetails($id)
+    {
+        $barang = BarangMasuk::findOrFail($id);
+        return response()->json([
+            'kode_barang' => $barang->kode_barang,
+            'nama_barang' => $barang->nama_barang,
+            'vendor' => $barang->vendor,
+            'kuantiti' => $barang->kuantiti,
+            'tanggal_masuk' => $barang->tanggal_masuk,
+            'deskripsi_barang' => $barang->deskripsi_barang,
+            'tipe_barang' => $barang->tipe_barang,
+            'serial_number' => $barang->serial_number,
+            'tempat_penyimpanan' => $barang->tempat_penyimpanan,
+        ]);
     }
 }

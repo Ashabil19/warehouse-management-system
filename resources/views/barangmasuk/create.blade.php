@@ -59,6 +59,24 @@
                     @endforeach
                 </select>
             </div>
+
+            <!-- Tipe Barang -->
+            <div>
+                <label class="block text-gray-600 mb-2">Tipe Barang</label>
+                <input type="text" name="tipe_barang" class="w-full px-4 py-2 bg-[#CBC3DC] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
+            </div>
+
+            <!-- Serial Number -->
+            <div>
+                <label class="block text-gray-600 mb-2">Serial Number</label>
+                <input type="text" name="serial_number" class="w-full px-4 py-2 bg-[#CBC3DC] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
+            </div>
+
+            <!-- Tempat Penyimpanan -->
+            <div>
+                <label class="block text-gray-600 mb-2">Tempat Penyimpanan</label>
+                <input type="text" name="tempat_penyimpanan" class="w-full px-4 py-2 bg-[#CBC3DC] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
+            </div>
         </div>
 
         <!-- Submit Button -->

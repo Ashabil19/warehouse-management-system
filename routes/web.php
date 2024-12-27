@@ -39,6 +39,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/barangmasuk/export', [BarangMasukController::class, 'exportBarangMasuk'])->name('barangmasuk.export');
         Route::get('/stock', [BarangMasukController::class, 'indexStock'])->name('stock.index');
         Route::get('/stock/export', [BarangMasukController::class, 'exportStock'])->name('stock.export');
+
+        Route::post('/barangmasuk/{id}/reject', [BarangMasukController::class, 'reject'])->name('barangmasuk.reject');
+        Route::get('/barangmasuk/{id}', [BarangMasukController::class, 'getDetails']);
+
+        Route::post('/barangmasuk/{id}/reject', [BarangMasukController::class, 'reject'])->name('barangmasuk.reject');
         Route::delete('/barangmasuk/{id}', [BarangMasukController::class, 'destroy'])->name('barangmasuk.destroy');
         Route::post('/barangmasuk/accept/{id}', [BarangMasukController::class, 'accept'])->name('barangmasuk.accept');
         Route::get('/barangmasuk/{id}/details', [BarangMasukController::class, 'getDetails'])->name('barangmasuk.details');

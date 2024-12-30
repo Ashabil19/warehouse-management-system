@@ -33,20 +33,19 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/barangmasuk', [BarangMasukController::class, 'indexBarangMasuk'])->name('barangmasuk.index');
         Route::get('/stock', [BarangMasukController::class, 'indexStock'])->name('stock.index');
         Route::get('/kirimbarang', [KirimBarangController::class, 'create'])->name('kirimbarang.create');
+        Route::get('/barangkeluar', [KirimBarangController::class, 'index'])->name('kirimbarang.index');
+        Route::patch('/kirimbarang/{id}/update-link-resi', [KirimBarangController::class, 'updateLinkResi']);
+    
         Route::post('/kirimbarang', [KirimBarangController::class, 'store'])->name('kirimbarang.store');
         Route::get('/kirimbarang/export', [KirimBarangController::class, 'export'])->name('kirimbarang.export');
         
         Route::get('/barangmasuk/export', [BarangMasukController::class, 'exportBarangMasuk'])->name('barangmasuk.export');
-        Route::get('/stock', [BarangMasukController::class, 'indexStock'])->name('stock.index');
         Route::get('/stock/export', [BarangMasukController::class, 'exportStock'])->name('stock.export');
-
+        
         Route::post('/barangmasuk/{id}/reject', [BarangMasukController::class, 'reject'])->name('barangmasuk.reject');
-        Route::get('/barangmasuk/{id}', [BarangMasukController::class, 'getDetails']);
-
-        Route::post('/barangmasuk/{id}/reject', [BarangMasukController::class, 'reject'])->name('barangmasuk.reject');
+        Route::get('/barangmasuk/{id}', [BarangMasukController::class, 'getDetails']); // Rute untuk mendapatkan detail barang
         Route::delete('/barangmasuk/{id}', [BarangMasukController::class, 'destroy'])->name('barangmasuk.destroy');
         Route::post('/barangmasuk/accept/{id}', [BarangMasukController::class, 'accept'])->name('barangmasuk.accept');
-        Route::get('/barangmasuk/{id}/details', [BarangMasukController::class, 'getDetails'])->name('barangmasuk.details');
     });
 
     // Route untuk role 'sales'

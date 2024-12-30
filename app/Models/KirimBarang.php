@@ -16,7 +16,15 @@ class KirimBarang extends Model
         'nama_customer',
         'alamat_customer',
         'email_customer',
+        'no_surat_jalan',
+        'no_po',
+        'no_telepon',
+        'pic',
+        'shipper',
+        'keterangan',
+        'link_resi', // Tambahkan field baru
     ];
+    
 
     // Relasi dengan Stock
     public function stock()

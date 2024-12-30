@@ -25,6 +25,7 @@ class BarangMasuk extends Model
         'serial_number', // Field baru
         'tempat_penyimpanan', // Field baru
         'tanggal_masuk', // Field baru, akan diatur otomatis
+        'attachment_gambar', // Field untuk gambar
     ];
 
     // Relasi dengan Stock

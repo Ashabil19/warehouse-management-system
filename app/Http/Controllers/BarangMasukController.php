@@ -7,26 +7,26 @@ use App\Exports\BarangMasukExport;
 use App\Exports\KirimBarangExport;
 use Illuminate\Http\Request;
 use App\Models\BarangMasuk;
-use App\Models\Vendor; // Pastikan untuk mengimpor model Vendor
-use App\Models\Stock; // Pastikan Stock di-import
+use App\Models\Vendor;
+use App\Models\Stock;
 
 class BarangMasukController extends Controller
 {
     public function indexBarangMasuk()
     {
-        $barangMasuk = BarangMasuk::all(); // Retrieve all data from BarangMasuk
+        $barangMasuk = BarangMasuk::all();
         return view('barangmasuk.index', compact('barangMasuk'));
     }
 
     public function indexStock()
     {
-        $stocks = Stock::all(); // Ambil data stok dari model Stock
+        $stocks = Stock::all();
         return view('stock.index', compact('stocks'));
     }
 
     public function create()
     {
-        $vendors = Vendor::all(); // Ambil semua data vendor
+        $vendors = Vendor::all();
         return view('barangmasuk.create', compact('vendors'));
     }
 
@@ -40,32 +40,39 @@ class BarangMasukController extends Controller
             'harga_beli' => 'required|integer',
             'kuantiti' => 'required|integer',
             'deskripsi_barang' => 'nullable',
-            'vendor' => 'required|exists:vendors,id', // Pastikan ini sesuai dengan kolom di database
-            'tipe_barang' => 'nullable|string', // Validasi untuk tipe_barang
-            'serial_number' => 'nullable|string', // Validasi untuk serial_number
-            'tempat_penyimpanan' => 'nullable|string', // Validasi untuk tempat_penyimpanan
+            'vendor' => 'required|exists:vendors,id',
+            'tipe_barang' => 'nullable|string',
+            'serial_number' => 'nullable|string',
+            'tempat_penyimpanan' => 'nullable|string',
+            'attachment_gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Simpan data ke database
         $data = $request->all();
-        $data['tanggal_masuk'] = now(); // Set tanggal masuk ke timestamp saat ini
+        $data['tanggal_masuk'] = now();
+
+        // Proses upload gambar
+        if ($request->hasFile('attachment_gambar')) {
+            $file = $request->file('attachment_gambar');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images'), $filename);
+            $data['attachment_gambar'] = $filename;
+        }
 
         BarangMasuk::create($data);
 
-        // Redirect kembali ke halaman input barang
         return redirect()->back()->with('success', 'Barang berhasil ditambahkan');
     }
 
     public function edit($id)
     {
         $barang = BarangMasuk::findOrFail($id);
-        $vendors = Vendor::all(); // Ambil semua data vendor
+        $vendors = Vendor::all();
         return view('barangmasuk.edit', compact('barang', 'vendors'));
     }
 
     public function update(Request $request, $id)
     {
-        // Validasi input
         $request->validate([
             'kode_barang' => 'required|unique:barang_masuk,kode_barang,' . $id,
             'nama_barang' => 'required',
@@ -73,13 +80,12 @@ class BarangMasukController extends Controller
             'harga_beli' => 'required|integer',
             'kuantiti' => 'required|integer',
             'deskripsi_barang' => 'nullable',
-            'vendor' => 'required|exists:vendors,id', // Validasi vendor
-            'tipe_barang' => 'nullable|string', // Validasi untuk tipe_barang
-            'serial_number' => 'nullable|string', // Validasi untuk serial_number
-            'tempat_penyimpanan' => 'nullable|string', // Validasi untuk tempat_penyimpanan
+            'vendor' => 'required|exists:vendors,id',
+            'tipe_barang' => 'nullable|string',
+            'serial_number' => 'nullable|string',
+            'tempat_penyimpanan' => 'nullable|string',
         ]);
 
-        // Temukan barang dan perbarui data
         $barang = BarangMasuk::findOrFail($id);
         $barang->update($request->all());
 
@@ -94,9 +100,8 @@ class BarangMasukController extends Controller
             'tanggal_masuk' => now(),
             'jumlah' => $barangMasuk->kuantiti,
         ]);
-        // Update status di tabel barang_masuk
         $barangMasuk->status = 'accepted';
-        $barangMasuk->save(); // Explicitly save to ensure persistence
+        $barangMasuk->save();
         return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil dipindahkan ke stok');
     }
 
@@ -125,13 +130,15 @@ class BarangMasukController extends Controller
         return Excel::download(new KirimBarangExport, 'kirim_barang.xlsx');
     }
 
+    
+
     public function getDetails($id)
     {
         $barang = BarangMasuk::findOrFail($id);
         return response()->json([
             'kode_barang' => $barang->kode_barang,
             'nama_barang' => $barang->nama_barang,
-            'vendor' => $barang->vendor,
+            'vendor' => $barang->vendor->name,
             'kuantiti' => $barang->kuantiti,
             'tanggal_masuk' => $barang->tanggal_masuk,
             'deskripsi_barang' => $barang->deskripsi_barang,

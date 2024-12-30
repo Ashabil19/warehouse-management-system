@@ -9,14 +9,17 @@
    Export to Excel
 </a>
 
-<div style="height: 85%; overflow-y: auto;"> <!-- Add this div wrapper -->
+<div style="height: 85%; overflow-y: auto;">
     <table id="stockTable" style="width: 100%; margin-top: 20px; border-collapse: collapse;">
         <thead>
             <tr>
                 <th style="text-align: left; padding: 8px; color: #5B3E99;">NO</th>
                 <th style="text-align: left; padding: 8px; color: #5B3E99;">Nama Barang</th>
-                <th style="text-align: right; padding: 8px; color: #5B3E99; cursor: pointer;" onclick="sortTable(2)">Jumlah <span style="font-size: 12px;">&#9660;</span></th> <!-- Add arrow icon -->
-                <th style="text-align: right; padding: 8px; color: #5B3E99; cursor: pointer;" onclick="sortTable(3)">Status <span style="font-size: 12px;">&#9660;</span></th> <!-- Add arrow icon -->
+                <th style="text-align: left; padding: 8px; color: #5B3E99;">Tipe Barang</th>
+                <th style="text-align: left; padding: 8px; color: #5B3E99;">Vendor</th>
+                <th style="text-align: right; padding: 8px; color: #5B3E99;">Jumlah</th>
+                <th style="text-align: left; padding: 8px; color: #5B3E99;">Deskripsi</th>
+                <th style="text-align: left; padding: 8px; color: #5B3E99;">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -24,42 +27,58 @@
             <tr style="background-color: {{ $index % 2 == 0 ? '#F3F3F3' : '#FFFFFF' }};">
                 <td style="padding: 8px; width: 50px;">{{ $index + 1 }}.</td>
                 <td style="padding: 8px;">
-                    <p style="font-weight: bold;"> {{ $stock->barangmasuk->kode_barang }} | {{ $stock->barangmasuk->nama_barang }}</p>
-                    <a href="#" style="display: inline-block; padding: 5px 15px; background-color: #E0E0F8; color: #5B3E99; border: 1px solid #5B3E99; border-radius: 5px; font-weight: bold; text-decoration: none;">
-                        Stok Barang
-                    </a>
+                    <p style="font-weight: bold;">{{ $stock->barangMasuk->nama_barang }} - {{ $stock->barangMasuk->kode_barang }}</p>
                 </td>
+                <td style="padding: 8px;">{{ $stock->barangMasuk->tipe_barang }}</td>
+                <td style="padding: 8px;">{{ $stock->barangMasuk->vendor }}</td>
                 <td style="padding: 8px; text-align: right; font-weight: bold; font-size: 18px;">{{ $stock->jumlah }}</td>
-                <td style="padding: 8px; text-align: right; font-weight: bold; font-size: 18px; color: {{ $stock->status == 'dikirim' ? 'green' : 'inherit' }};">
-                    {{ $stock->status }}
+                <td style="padding: 8px;">{{ Str::limit($stock->barangMasuk->deskripsi_barang, 30) }}</td>
+                <td style="padding: 8px;">
+                    <button onclick="openModal({{ $stock->barangMasuk->id }})" class="px-4 py-2 bg-blue-200 text-black border border-purple-500 rounded font-bold hover:bg-purple-500 hover:text-white transition">
+                        Detail
+                    </button>
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
-</div> <!-- End of div wrapper -->
+</div>
+
+<!-- Modal untuk Detail Barang -->
+<div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="relative bg-white rounded-lg p-6 w-11/12 max-w-lg">
+        <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-800" style="font-size:34px" onclick="closeModal()">×</button>
+        <h2 class="text-2xl font-bold text-purple-800 mb-4">DETAIL BARANG</h2>
+        <div id="modalBody">
+            <!-- Data akan diisi di sini dengan JavaScript -->
+        </div>
+    </div>
+</div>
 
 <script>
-function sortTable(columnIndex) {
-    const table = document.getElementById("stockTable");
-    const tbody = table.getElementsByTagName("tbody")[0];
-    const rows = Array.from(tbody.getElementsByTagName("tr"));
-    const isNumericColumn = columnIndex === 2; // Assuming column 2 is "Jumlah"
+    function openModal(id) {
+        fetch(`/barangmasuk/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                const modalBody = document.getElementById('modalBody');
+                modalBody.innerHTML = `
+                    <p><strong>Kode Barang:</strong> ${data.kode_barang}</p>
+                    <p><strong>Nama Barang:</strong> ${data.nama_barang}</p>
+                    <p><strong>Vendor:</strong> ${data.vendor}</p>
+                    <p><strong>Kuantiti:</strong> ${data.kuantiti}</p>
+                    <p><strong>Tanggal Masuk:</strong> ${data.tanggal_masuk}</p>
+                    <p><strong>Deskripsi:</strong> ${data.deskripsi_barang}</p>
+                    <p><strong>Tipe Barang:</strong> ${data.tipe_barang}</p>
+                    <p><strong>Serial Number:</strong> ${data.serial_number}</p>
+                    <p><strong>Tempat Penyimpanan:</strong> ${data.tempat_penyimpanan}</p>
+                `;
+                document.getElementById('detailModal').classList.remove('hidden');
+            });
+    }
 
-    rows.sort((a, b) => {
-        const cellA = a.getElementsByTagName("td")[columnIndex].innerText;
-        const cellB = b.getElementsByTagName("td")[columnIndex].innerText;
-
-        if (isNumericColumn) {
-            return parseFloat(cellA) - parseFloat(cellB);
-        } else {
-            return cellA.localeCompare(cellB);
-        }
-    });
-
-    // Append sorted rows back to the tbody
-    rows.forEach(row => tbody.appendChild(row));
-}
+    function closeModal() {
+        document.getElementById('detailModal').classList.add('hidden');
+    }
 </script>
 
 @endsection

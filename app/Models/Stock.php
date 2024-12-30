@@ -21,11 +21,16 @@ class Stock extends Model
     {
         return $this->belongsTo(BarangMasuk::class, 'id_barangmasuk');
     }
-    
 
     // Relasi dengan model KirimBarang
     public function kirimBarang()
     {
         return $this->hasMany(KirimBarang::class, 'id_stock');
+    }
+
+    // Relasi dengan model Vendor
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class, 'vendor_id'); // Pastikan 'vendor_id' sesuai dengan kolom di tabel stock
     }
 }

@@ -4,9 +4,7 @@
 
 @section('content')
 <div class="p-10 bg-gray-100 min-h-screen">
-
-
-    <form action="{{ route('kirimbarang.create') }}" method="POST" class="space-y-6">
+    <form action="{{ route('kirimbarang.store') }}" method="POST" class="space-y-6">
         @csrf
 
         <!-- Search Bar -->
@@ -71,143 +69,46 @@
                 <input type="text" name="alamat_customer" id="alamat_customer" class="mt-1 w-full p-3 border rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
             </div>
         </div>
+
         <div>
             <label for="email_customer" class="block text-sm font-medium text-gray-700">Email Customer</label>
-            <input type="email" name="email_customer" id="nama_perusahaan" class="mt-1 w-full p-3 border rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            <input type="email" name="email_customer" id="email_customer" class="mt-1 w-full p-3 border rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
         </div>
+
+        <div>
+            <label for="no_surat_jalan" class="block text-sm font-medium text-gray-700">No Surat Jalan</label>
+            <input type="text" name="no_surat_jalan" id="no_surat_jalan" class="mt-1 w-full p-3 border rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+        </div>
+
+        <div>
+            <label for="no_po" class="block text-sm font-medium text-gray-700">No PO</label>
+            <input type="text" name="no_po" id="no_po" class="mt-1 w-full p-3 border rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+        </div>
+
+        <div>
+            <label for="no_telepon" class="block text-sm font-medium text-gray-700">No Telepon</label>
+            <input type="text" name="no_telepon" id="no_telepon" class="mt-1 w-full p-3 border rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+        </div>
+
+        <div>
+            <label for="pic" class="block text-sm font-medium text-gray-700">PIC (Person In Charge)</label>
+            <input type="text" name="pic" id="pic" class="mt-1 w-full p-3 border rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+        </div>
+
+        <div>
+            <label for="shipper" class="block text-sm font-medium text-gray-700">Shipper</label>
+            <input type="text" name="shipper" id="shipper" class="mt-1 w-full p-3 border rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+        </div>
+
+        <div>
+            <label for="keterangan" class="block text-sm font-medium text-gray-700">Keterangan</label>
+            <textarea name="keterangan" id="keterangan" class="mt-1 w-full p-3 border rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+        </div>
+
         <button type="submit" class="w-full py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
             KIRIM
         </button>
     </form>
-    
-
-    {{-- <form action="{{ route('kirimbarang.create') }}" method="POST">
-        @csrf <!-- CSRF Token -->
-        <label for="barang_id">Barang:</label>
-        <select name="barang_id">
-            @foreach($barangList as $barang)
-                <option value="{{ $barang->id }}">{{ $barang->barangmasuk->nama_product }}</option>
-            @endforeach
-        </select>
-        
-        <!-- Input lainnya -->
-        <label for="nama_customer">Nama Customer:</label>
-        <input type="text" name="nama_customer" required>
-    
-        <label for="alamat_customer">Alamat Customer:</label>
-        <input type="text" name="alamat_customer" required>
-    
-        <label for="email_customer">Email Customer:</label>
-        <input type="email" name="email_customer" required>
-    
-        <button type="submit">Kirim Barang</button>
-    </form> --}}
-    
-
-    {{-- <form action="{{ route('kirimbarang.create') }}" method="POST">
-        @csrf
-    
-        <!-- Pilih Barang -->
-        <div class="mb-3">
-            <label for="barang_id" class="block mb-2 text-sm font-medium text-gray-700">Pilih Barang</label>
-            <select 
-                name="barang_id" 
-                id="barang_id" 
-                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200" 
-                required
-            >
-                <option value="" disabled selected>Pilih Barang</option>
-                @foreach($barangList as $stock)
-                    <option 
-                        value="{{ $stock->id }}" 
-                        data-nama="{{ $stock->barangmasuk->nama_barang }}" 
-                        data-kode="{{ $stock->barangmasuk->kode_barang}}" 
-                        data-vendor="{{ $stock->barangmasuk->vendor }}" 
-                        data-kategori="{{ $stock->barangmasuk->kategori }}" 
-                        data-kuantiti="{{ $stock->barangmasuk->kuantiti }}"
-                    >
-                        {{ $stock->barangmasuk->nama_barang }} ({{ $stock->barangmasuk->kode_barang }})
-                    </option>
-                @endforeach
-            </select>
-            @error('barang_id')
-                <span class="text-sm text-red-500">{{ $message }}</span>
-            @enderror
-        </div>
-    
-        <!-- Detail Barang -->
-        <div id="detail-barang" class="bg-white rounded-lg shadow p-6 mb-6 hidden">
-            <h2 class="text-purple-800 font-semibold mb-4">DETAIL BARANG</h2>
-            <div class="grid grid-cols-2 gap-4 text-sm">
-                <div>Kode Barang: <span id="kode_barang" class="font-semibold"></span></div>
-                <div>Vendor: <span id="vendor" class="font-semibold"></span></div>
-                <div>Nama Barang: <span id="nama_barang" class="font-semibold"></span></div>
-                <div>Kategori: <span id="kategori" class="font-semibold"></span></div>
-                <div>Kuantiti: <span id="kuantiti" class="font-semibold"></span></div>
-            </div>
-        </div>
-    
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Nama Customer -->
-            <div>
-                <label for="nama_customer" class="block text-sm font-medium text-gray-700">Nama Customer</label>
-                <input 
-                    type="text" 
-                    name="nama_customer" 
-                    id="nama_customer" 
-                    class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-200 focus:border-blue-500" 
-                    required 
-                    maxlength="255" 
-                    value="{{ old('nama_customer') }}"
-                >
-                @error('nama_customer')
-                    <span class="text-red-500 text-sm">{{ $message }}</span>
-                @enderror
-            </div>
-    
-            <!-- Alamat Customer -->
-            <div>
-                <label for="alamat_customer" class="block text-sm font-medium text-gray-700">Alamat Customer</label>
-                <textarea 
-                    name="alamat_customer" 
-                    id="alamat_customer" 
-                    class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-200 focus:border-blue-500" 
-                    required 
-                    maxlength="500"
-                >{{ old('alamat_customer') }}</textarea>
-                @error('alamat_customer')
-                    <span class="text-red-500 text-sm">{{ $message }}</span>
-                @enderror
-            </div>
-    
-            <!-- Nama Perusahaan -->
-            <div>
-                <label for="nama_perusahaan" class="block text-sm font-medium text-gray-700">Nama Perusahaan</label>
-                <input 
-                    type="text" 
-                    name="nama_perusahaan" 
-                    id="nama_perusahaan" 
-                    class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-200 focus:border-blue-500" 
-                    maxlength="255"
-                >
-                @error('nama_perusahaan')
-                    <span class="text-red-500 text-sm">{{ $message }}</span>
-                @enderror
-            </div>
-        </div>
-    
-        <!-- Submit Button -->
-        <button 
-            type="submit" 
-            class="w-full bg-green-500 text-white p-3 rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-300"
-        >
-            KIRIM
-        </button>
-    </form> --}}
-    
-
-
-
 
     <script>
         const selectBarang = document.getElementById('barang_id');
@@ -222,44 +123,5 @@
             document.getElementById('kuantiti').textContent = selectedOption.getAttribute('data-kuantiti') || '-';
         });
     </script>
-    {{-- <script>
-        // Script untuk menampilkan detail barang saat memilih barang
-        document.getElementById('barang_id').addEventListener('change', function() {
-            var selectedOption = this.options[this.selectedIndex];
-            
-            // Update detail barang
-            document.getElementById('kode_barang').innerText = selectedOption.getAttribute('data-kode');
-            document.getElementById('vendor').innerText = selectedOption.getAttribute('data-vendor');
-            document.getElementById('nama_barang').innerText = selectedOption.getAttribute('data-nama');
-            document.getElementById('kategori').innerText = selectedOption.getAttribute('data-kategori');
-            document.getElementById('kuantiti').innerText = selectedOption.getAttribute('data-kuantiti');
-    
-            // Tampilkan detail barang
-            document.getElementById('detail-barang').classList.remove('hidden');
-        });
-    </script>
-    
 </div>
-
-<script>
-    const barangSelect = document.getElementById('barang_id');
-    const detailBarang = document.getElementById('detail-barang');
-    const kodeBarang = document.getElementById('kode_barang');
-    const vendor = document.getElementById('vendor');
-    const namaBarang = document.getElementById('nama_barang');
-    const kategori = document.getElementById('kategori');
-    const kuantiti = document.getElementById('kuantiti');
-
-    barangSelect.addEventListener('change', function() {
-        const selectedOption = barangSelect.options[barangSelect.selectedIndex];
-        kodeBarang.innerText = selectedOption.getAttribute('data-kode');
-        vendor.innerText = selectedOption.getAttribute('data-vendor');
-        namaBarang.innerText = selectedOption.getAttribute('data-nama');
-        kategori.innerText = selectedOption.getAttribute('data-kategori');
-        kuantiti.innerText = selectedOption.getAttribute('data-kuantiti');
-        
-        // Show the detail section
-        detailBarang.classList.remove('hidden');
-    });
-</script> --}}
 @endsection

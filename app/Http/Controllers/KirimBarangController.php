@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Stock; 
 use App\Models\KirimBarang;
-use Maatwebsite\Excel\Facades\Excel; // Pastikan ini diimpor
-use App\Exports\KirimBarangExport; // Pastikan ini diimpor
-
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\KirimBarangExport;
 
 class KirimBarangController extends Controller
 {
@@ -15,14 +14,14 @@ class KirimBarangController extends Controller
     public function create()
     {
         // Ambil hanya stock dengan status selain 'dikirim'
-        $barangList = Stock::with('barangmasuk')->where('status', '!=', 'dikirim')->get();
+        $barangList = Stock::with('barangMasuk')->where('status', '!=', 'dikirim')->get();
 
         // Kirim data barangList ke view
         return view('barangkeluar.create', compact('barangList'));
     }
 
     // Menyimpan data barang keluar ke database
-    public function store(Request $request)
+   public function store(Request $request)
     {
         // Validasi input
         $validatedData = $request->validate([
@@ -39,6 +38,12 @@ class KirimBarangController extends Controller
             'nama_customer' => 'required|string|max:255',
             'alamat_customer' => 'required|string|max:500',
             'email_customer' => 'required|email|max:255',
+            'no_surat_jalan' => 'required|string|max:255', // Validasi untuk No Surat Jalan
+            'no_po' => 'required|string|max:255',          // Validasi untuk No PO
+            'no_telepon' => 'required|string|max:15',      // Validasi untuk No Telepon
+            'pic' => 'required|string|max:255',             // Validasi untuk PIC
+            'shipper' => 'required|string|max:255',         // Validasi untuk Shipper
+            'keterangan' => 'nullable|string|max:500',      // Validasi untuk Keterangan
         ]);
 
         // Simpan data ke tabel KirimBarang
@@ -48,6 +53,12 @@ class KirimBarangController extends Controller
                 'nama_customer' => $validatedData['nama_customer'],
                 'alamat_customer' => $validatedData['alamat_customer'],
                 'email_customer' => $validatedData['email_customer'],
+                'no_surat_jalan' => $validatedData['no_surat_jalan'], // Simpan No Surat Jalan
+                'no_po' => $validatedData['no_po'],                   // Simpan No PO
+                'no_telepon' => $validatedData['no_telepon'],         // Simpan No Telepon
+                'pic' => $validatedData['pic'],                         // Simpan PIC
+                'shipper' => $validatedData['shipper'],                 // Simpan Shipper
+                'keterangan' => $validatedData['keterangan'],           // Simpan Keterangan
             ]);
 
             // Update status barang menjadi 'dikirim'
@@ -64,29 +75,34 @@ class KirimBarangController extends Controller
         }
     }
 
-   // Menampilkan semua data kirimbarang
-   public function index()
-   {
-       // Ambil semua data kirimbarang dengan relasi stock dan barangMasuk
-       $kirimBarang = KirimBarang::with(['stock.barangMasuk'])->get();
 
-       // Kirim data ke view
-       return view('barangkeluar.index', compact('kirimBarang'));
-   }
+    public function updateLinkResi(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'link_resi' => 'nullable|string|max:255',
+        ]);
 
-public function showAll()
-{
-    // Ambil semua data kirim_barang beserta relasi yang diperlukan
-    $kirimBarang = KirimBarang::with(['stock.barangMasuk.barang'])->get();
+        $kirimBarang = KirimBarang::findOrFail($id);
+        $kirimBarang->link_resi = $validatedData['link_resi'];
+        $kirimBarang->save();
 
-    // Kirim data ke view
-    return view('barangkeluar.showAll', compact('kirimBarang'));
-}
+        return response()->json(['success' => true]);
+    }
 
 
 
-public function export()
-{
-    return Excel::download(new KirimBarangExport, 'kirim_barang.xlsx');
-}
+    // Menampilkan semua data kirimbarang
+    public function index()
+    {
+        // Ambil semua data kirimbarang dengan relasi stock dan barangMasuk
+        $kirimBarang = KirimBarang::with(['stock.barangMasuk'])->get();
+
+        // Kirim data ke view
+        return view('barangkeluar.index', compact('kirimBarang'));
+    }
+
+    public function export()
+    {
+        return Excel::download(new KirimBarangExport, 'kirim_barang.xlsx');
+    }
 }

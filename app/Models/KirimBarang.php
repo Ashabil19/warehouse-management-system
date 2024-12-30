@@ -22,10 +22,10 @@ class KirimBarang extends Model
         'pic',
         'shipper',
         'keterangan',
-        'link_resi', // Tambahkan field baru
+        'jumlah_kirim', // Tambahkan field baru
+        'link_resi',
     ];
     
-
     // Relasi dengan Stock
     public function stock()
     {

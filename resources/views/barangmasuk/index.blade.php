@@ -38,6 +38,7 @@
                             Details
                         </button>
                         
+                        <!-- Modal -->
                         <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
                             <div class="relative bg-white rounded-lg p-6 w-11/12 max-w-lg">
                                 <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-800" style="font-size:34px" onclick="closeModal()">×</button>
@@ -82,32 +83,34 @@
     </table>
 </div>
 
-<script src="{{ asset('js/modal.js') }}"></script>
-
 <script>
-    function openModal(id) {
-        fetch(`/barangmasuk/${id}`)
-            .then(response => response.json())
-            .then(data => {
-                const modalBody = document.getElementById('modalBody');
-                modalBody.innerHTML = `
-                    <p><strong>Kode Barang:</strong> ${data.kode_barang}</p>
-                    <p><strong>Nama Barang:</strong> ${data.nama_barang}</p>
-                    <p><strong>Vendor:</strong> ${data.vendor}</p>
-                    <p><strong>Kuantiti:</strong> ${data.kuantiti}</p>
-                    <p><strong>Tanggal Masuk:</strong> ${data.tanggal_masuk}</p>
-                    <p><strong>Deskripsi:</strong> ${data.deskripsi_barang}</p>
-                    <p><strong>Tipe Barang:</strong> ${data.tipe_barang}</p>
-                    <p><strong>Serial Number:</strong> ${data.serial_number}</p>
-                    <p><strong>Tempat Penyimpanan:</strong> ${data.tempat_penyimpanan}</p>
-                `;
-                document.getElementById('detailModal').classList.remove('hidden');
-            });
-    }
+   function openModal(id) {
+    fetch(`/barangmasuk/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <p><strong>Kode Barang:</strong> ${data.kode_barang}</p>
+                <p><strong>Nama Barang:</strong> ${data.nama_barang}</p>
+                <p><strong>Vendor:</strong> ${data.vendor}</p>
+                <p><strong>Kuantiti:</strong> ${data.kuantiti}</p>
+                <p><strong>Tanggal Masuk:</strong> ${data.tanggal_masuk}</p>
+                <p><strong>Deskripsi:</strong> ${data.deskripsi_barang}</p>
+                <p><strong>Tipe Barang:</strong> ${data.tipe_barang}</p>
+                <p><strong>Serial Number:</strong> ${data.serial_number}</p>
+                <p><strong>Tempat Penyimpanan:</strong> ${data.tempat_penyimpanan}</p>
+                <p><strong>Gambar:</strong></p>
+                <img src="${data.gambar}" alt="Gambar Barang" style="max-width: 100%; height: auto;">
+            `;
+            document.getElementById('detailModal').classList.remove('hidden');
+        })
+        .catch(error => console.error('Error fetching data:', error));
+}
 
-    function closeModal() {
-        document.getElementById('detailModal').classList.add('hidden');
-    }
+function closeModal() {
+    document.getElementById('detailModal').classList.add('hidden');
+}
+
 </script>
 
 @endsection

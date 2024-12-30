@@ -21,20 +21,15 @@ class KirimBarangController extends Controller
     }
 
     // Menyimpan data barang keluar ke database
-   public function store(Request $request)
+    public function store(Request $request)
     {
         // Validasi input
         $validatedData = $request->validate([
             'barang_id' => [
                 'required',
                 'exists:stocks,id',
-                function ($attribute, $value, $fail) {
-                    $stock = Stock::find($value);
-                    if ($stock && $stock->status === 'dikirim') {
-                        $fail('Barang ini sudah dikirim dan tidak dapat dipilih lagi.');
-                    }
-                },
             ],
+            'jumlah_kirim' => 'required|integer|min:1', // Validasi untuk jumlah kirim
             'nama_customer' => 'required|string|max:255',
             'alamat_customer' => 'required|string|max:500',
             'email_customer' => 'required|email|max:255',
@@ -45,7 +40,15 @@ class KirimBarangController extends Controller
             'shipper' => 'required|string|max:255',         // Validasi untuk Shipper
             'keterangan' => 'nullable|string|max:500',      // Validasi untuk Keterangan
         ]);
-
+    
+        // Ambil stok berdasarkan barang_id
+        $stock = Stock::find($validatedData['barang_id']);
+    
+        // Cek apakah jumlah yang ingin dikirim tidak melebihi stok
+        if ((int)$validatedData['jumlah_kirim'] > (int)$stock->jumlah) {
+            return redirect()->back()->withErrors(['jumlah_kirim' => 'Jumlah kirim melebihi stok yang tersedia.']);
+        }
+    
         // Simpan data ke tabel KirimBarang
         try {
             $kirimBarang = KirimBarang::create([
@@ -59,22 +62,31 @@ class KirimBarangController extends Controller
                 'pic' => $validatedData['pic'],                         // Simpan PIC
                 'shipper' => $validatedData['shipper'],                 // Simpan Shipper
                 'keterangan' => $validatedData['keterangan'],           // Simpan Keterangan
+                'jumlah_kirim' => $validatedData['jumlah_kirim'],       // Simpan jumlah kirim
             ]);
-
-            // Update status barang menjadi 'dikirim'
-            $stock = Stock::find($validatedData['barang_id']);
+    
+            // Update jumlah barang di stok
             if ($stock) {
-                $stock->status = 'dikirim';
+                // Kurangi jumlah barang di stok
+                $stock->jumlah -= $validatedData['jumlah_kirim'];
+    
+                // Jika jumlah menjadi 0, ubah status menjadi 'kosong'
+                if ($stock->jumlah <= 0) {
+                    $stock->status = 'kosong'; // Ubah status menjadi 'kosong'
+                }
+    
                 $stock->save();
             }
-
+    
             // Redirect dengan pesan sukses
             return redirect('/barangkeluar')->with('success', 'Barang berhasil dikirim!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan. Coba lagi.');
         }
     }
-
+    
+    
+    
 
     public function updateLinkResi(Request $request, $id)
     {
@@ -88,8 +100,6 @@ class KirimBarangController extends Controller
 
         return response()->json(['success' => true]);
     }
-
-
 
     // Menampilkan semua data kirimbarang
     public function index()

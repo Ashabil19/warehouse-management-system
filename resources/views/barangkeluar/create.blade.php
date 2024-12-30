@@ -42,6 +42,15 @@
             @enderror
         </div>
 
+        <!-- Jumlah Kirim Field -->
+        <div class="mb-6">
+            <label for="jumlah_kirim" class="block mb-2 text-sm font-medium text-gray-700">Jumlah Kirim</label>
+            <input type="number" name="jumlah_kirim" id="jumlah_kirim" class="mt-1 w-full p-3 border rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+            @error('jumlah_kirim')
+                <span class="text-sm text-red-500">{{ $message }}</span>
+            @enderror
+        </div>
+
         <!-- Details Section -->
         <div class="bg-gray-100 rounded-lg p-6">
             <h4 class="text-lg font-bold text-indigo-700 mb-4">DETAIL BARANG</h4>
@@ -50,6 +59,8 @@
                     <p><strong>Kode Barang:</strong> <span id="kode_barang">-</span></p>
                     <p><strong>Nama Barang:</strong> <span id="nama_barang">-</span></p>
                     <p><strong>Kuantiti:</strong> <span id="kuantiti">-</span></p>
+                    <p><strong>Gambar:</strong></p>
+                    <img id="gambar_barang" src="" alt="Gambar Barang" class="mt-2" style="max-width: 100%; height: auto; display: none;">
                 </div>
                 <div>
                     <p><strong>Vendor:</strong> <span id="vendor">-</span></p>
@@ -121,6 +132,17 @@
             document.getElementById('vendor').textContent = selectedOption.getAttribute('data-vendor') || '-';
             document.getElementById('kategori').textContent = selectedOption.getAttribute('data-kategori') || '-';
             document.getElementById('kuantiti').textContent = selectedOption.getAttribute('data-kuantiti') || '-';
+
+            // Update image
+            const gambar = selectedOption.getAttribute('data-gambar');
+            const gambarElement = document.getElementById('gambar_barang');
+            if (gambar) {
+                gambarElement.src = gambar;
+                gambarElement.style.display = 'block'; // Show the image
+            } else {
+                gambarElement.src = '';
+                gambarElement.style.display = 'none'; // Hide the image
+            }
         });
     </script>
 </div>

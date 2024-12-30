@@ -133,18 +133,22 @@ class BarangMasukController extends Controller
     
 
     public function getDetails($id)
-    {
-        $barang = BarangMasuk::findOrFail($id);
-        return response()->json([
-            'kode_barang' => $barang->kode_barang,
-            'nama_barang' => $barang->nama_barang,
-            'vendor' => $barang->vendor->name,
-            'kuantiti' => $barang->kuantiti,
-            'tanggal_masuk' => $barang->tanggal_masuk,
-            'deskripsi_barang' => $barang->deskripsi_barang,
-            'tipe_barang' => $barang->tipe_barang,
-            'serial_number' => $barang->serial_number,
-            'tempat_penyimpanan' => $barang->tempat_penyimpanan,
-        ]);
-    }
+{
+    $barang = BarangMasuk::findOrFail($id);
+    return response()->json([
+        'kode_barang' => $barang->kode_barang,
+        'nama_barang' => $barang->nama_barang,
+        'vendor' => $barang->vendor->name,
+        'kuantiti' => $barang->kuantiti,
+        'tanggal_masuk' => $barang->created_at->format('Y-m-d'),
+        'deskripsi_barang' => $barang->deskripsi_barang,
+        'tipe_barang' => $barang->tipe_barang,
+        'serial_number' => $barang->serial_number,
+        'tempat_penyimpanan' => $barang->tempat_penyimpanan,
+        'gambar' => asset('images/' . $barang->attachment_gambar), // Pastikan ini sesuai dengan path gambar
+    ]);
+}
+
+
+    
 }

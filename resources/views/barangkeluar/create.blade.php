@@ -30,7 +30,7 @@
                             data-kode="{{ $stock->barangmasuk->kode_barang }}" 
                             data-vendor="{{ $stock->barangmasuk->vendor }}" 
                             data-kategori="{{ $stock->barangmasuk->kategori }}" 
-                            data-kuantiti="{{ $stock->barangmasuk->kuantiti }}"
+                            data-kuantiti="{{ $stock->jumlah }}"
                         >
                             {{ $stock->barangmasuk->nama_barang }} ({{ $stock->barangmasuk->kode_barang }})
                         </option>

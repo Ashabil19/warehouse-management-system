@@ -18,7 +18,7 @@
             <!-- Harga Beli -->
             <div>
                 <label class="block text-gray-600 mb-2">Harga Beli</label>
-                <input type="number" name="harga_beli" id="harga_beli" class="w-full px-4 py-2 bg-[#CBC3DC] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                <input type="text" name="harga_beli" id="harga_beli" class="w-full px-4 py-2 bg-[#CBC3DC] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500" required oninput="formatCurrency(this)">
             </div>
 
             <!-- Nama Barang -->
@@ -40,7 +40,7 @@
             <!-- Kuantiti -->
             <div>
                 <label class="block text-gray-600 mb-2">Kuantiti</label>
-                <input type="number" name="kuantiti" id="kuantiti" class="w-full px-4 py-2 bg-[#CBC3DC] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                <input type="text" name="kuantiti" id="kuantiti" class="w-full px-4 py-2 bg-[#CBC3DC] rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500" required oninput="formatCurrency(this)">
             </div>
 
             <!-- Deskripsi Barang -->
@@ -123,6 +123,17 @@
 </div>
 
 <script>
+    function formatCurrency(input) {
+        // Menghapus semua karakter yang bukan angka
+        let value = input.value.replace(/[^0-9]/g, '');
+        
+        // Format menjadi mata uang dengan titik sebagai pemisah ribuan
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+        // Mengupdate nilai input
+        input.value = value;
+    }
+
     function showModal() {
         // Ambil nilai dari form
         document.getElementById('modal_kode_barang').innerText = document.getElementById('kode_barang').value;

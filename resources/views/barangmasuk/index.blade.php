@@ -38,17 +38,6 @@
                             Details
                         </button>
                         
-                        <!-- Modal -->
-                        <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-                            <div class="relative bg-white rounded-lg p-6 w-11/12 max-w-lg">
-                                <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-800" style="font-size:34px" onclick="closeModal()">×</button>
-                                <h2 class="text-2xl font-bold text-purple-800 mb-4">DETAIL BARANG</h2>
-                                <div id="modalBody">
-                                    <!-- Data will be populated here with JavaScript -->
-                                </div>
-                            </div>
-                        </div>
-
                         @if($barang->status === 'pending')
                             <form action="{{ route('barangmasuk.accept', $barang->id) }}" method="POST" class="inline">
                                 @csrf
@@ -83,10 +72,26 @@
     </table>
 </div>
 
+<!-- Modal -->
+<div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="relative bg-white rounded-lg p-6 w-11/12 max-w-lg">
+        <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-800" style="font-size:34px" onclick="closeModal()">×</button>
+        <h2 class="text-2xl font-bold text-purple-800 mb-4">DETAIL BARANG</h2>
+        <div id="modalBody">
+            <!-- Data will be populated here with JavaScript -->
+        </div>
+    </div>
+</div>
+
 <script>
-   function openModal(id) {
+function openModal(id) {
     fetch(`/barangmasuk/${id}`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             const modalBody = document.getElementById('modalBody');
             modalBody.innerHTML = `
@@ -94,7 +99,7 @@
                 <p><strong>Nama Barang:</strong> ${data.nama_barang}</p>
                 <p><strong>Vendor:</strong> ${data.vendor}</p>
                 <p><strong>Kuantiti:</strong> ${data.kuantiti}</p>
-                <p><strong>Tanggal Masuk:</strong> ${data.tanggal_masuk}</p>
+                <p><strong>Tanggal Masuk:</strong> ${data.created_at}</p>
                 <p><strong>Deskripsi:</strong> ${data.deskripsi_barang}</p>
                 <p><strong>Tipe Barang:</strong> ${data.tipe_barang}</p>
                 <p><strong>Serial Number:</strong> ${data.serial_number}</p>
@@ -110,7 +115,6 @@
 function closeModal() {
     document.getElementById('detailModal').classList.add('hidden');
 }
-
 </script>
 
 @endsection

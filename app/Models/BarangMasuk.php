@@ -20,13 +20,13 @@ class BarangMasuk extends Model
         'kategori',
         'kuantiti',
         'deskripsi_barang',
-        'vendor', // Pastikan ini sesuai dengan kolom di tabel
-        'tipe_barang', // Field baru
-        'serial_number', // Field baru
-        'tempat_penyimpanan', // Field baru
-        'tanggal_masuk', // Field baru, akan diatur otomatis
-        'attachment_gambar', // Field untuk gambar
+        'vendor',
+        'tipe_barang',
+        'serial_number',
+        'tempat_penyimpanan',
+        'attachment_gambar',
     ];
+    
 
     // Relasi dengan Stock
     public function stock()

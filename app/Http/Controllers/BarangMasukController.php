@@ -32,36 +32,42 @@ class BarangMasukController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi input
-        $request->validate([
-            'kode_barang' => 'required|unique:barang_masuk',
-            'nama_barang' => 'required',
-            'kategori' => 'required',
-            'harga_beli' => 'required|integer',
-            'kuantiti' => 'required|integer',
-            'deskripsi_barang' => 'nullable',
+        $validatedData = $request->validate([
+            'kode_barang' => 'required|string|max:255',
+            'harga_beli' => 'required|string',
+            'nama_barang' => 'required|string|max:255',
+            'kategori' => 'required|string|max:255',
+            'kuantiti' => 'required|string',
+            'deskripsi_barang' => 'nullable|string',
             'vendor' => 'required|exists:vendors,id',
-            'tipe_barang' => 'nullable|string',
-            'serial_number' => 'nullable|string',
-            'tempat_penyimpanan' => 'nullable|string',
-            'attachment_gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'tipe_barang' => 'nullable|string|max:255',
+            'serial_number' => 'nullable|string|max:255',
+            'tempat_penyimpanan' => 'nullable|string|max:255',
+            'attachment_gambar' => 'nullable|image|max:2048',
         ]);
 
-        // Simpan data ke database
-        $data = $request->all();
-        $data['tanggal_masuk'] = now();
+        $hargaBeli = (float) str_replace('.', '', $validatedData['harga_beli']);
+        $kuantiti = (int) str_replace('.', '', $validatedData['kuantiti']);
 
-        // Proses upload gambar
-        if ($request->hasFile('attachment_gambar')) {
-            $file = $request->file('attachment_gambar');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images'), $filename);
-            $data['attachment_gambar'] = $filename;
+        try {
+            BarangMasuk::create([
+                'kode_barang' => $validatedData['kode_barang'],
+                'harga_beli' => $hargaBeli,
+                'nama_barang' => $validatedData['nama_barang'],
+                'kategori' => $validatedData['kategori'],
+                'kuantiti' => $kuantiti,
+                'deskripsi_barang' => $validatedData['deskripsi_barang'],
+                'vendor' => $validatedData['vendor'],
+                'tipe_barang' => $validatedData['tipe_barang'],
+                'serial_number' => $validatedData['serial_number'],
+                'tempat_penyimpanan' => $validatedData['tempat_penyimpanan'],
+                'attachment_gambar' => $request->file('attachment_gambar') ? $request->file('attachment_gambar')->store('images') : null,
+            ]);
+
+            return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        BarangMasuk::create($data);
-
-        return redirect()->back()->with('success', 'Barang berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -73,21 +79,21 @@ class BarangMasukController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'kode_barang' => 'required|unique:barang_masuk,kode_barang,' . $id,
-            'nama_barang' => 'required',
-            'kategori' => 'required',
+            'nama_barang' => 'required|string|max:255',
+            'kategori' => 'required|string|max:255',
             'harga_beli' => 'required|integer',
             'kuantiti' => 'required|integer',
-            'deskripsi_barang' => 'nullable',
+            'deskripsi_barang' => 'nullable|string',
             'vendor' => 'required|exists:vendors,id',
-            'tipe_barang' => 'nullable|string',
-            'serial_number' => 'nullable|string',
-            'tempat_penyimpanan' => 'nullable|string',
+            'tipe_barang' => 'nullable|string|max:255',
+            'serial_number' => 'nullable|string|max:255',
+            'tempat_penyimpanan' => 'nullable|string|max:255',
         ]);
 
         $barang = BarangMasuk::findOrFail($id);
-        $barang->update($request->all());
+        $barang->update($validatedData);
 
         return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil diperbarui.');
     }
@@ -125,30 +131,27 @@ class BarangMasukController extends Controller
         return Excel::download(new BarangMasukExport, 'barang_masuk.xlsx');
     }
 
-    public function exportKirimBarang()
+    public function getDetails($id)
     {
-        return Excel::download(new KirimBarangExport, 'kirim_barang.xlsx');
+        $barang = BarangMasuk::findOrFail($id);
+        return response()->json([
+            'kode_barang' => $barang->kode_barang,
+            'nama_barang' => $barang->nama_barang,
+            'vendor' => $barang->vendor->name ?? '-',
+            'kuantiti' => $barang->kuantiti,
+            'tanggal_masuk' => $barang->created_at->format('Y-m-d'),
+            'deskripsi_barang' => $barang->deskripsi_barang,
+            'tipe_barang' => $barang->tipe_barang,
+            'serial_number' => $barang->serial_number,
+            'tempat_penyimpanan' => $barang->tempat_penyimpanan,
+            'gambar' => $barang->attachment_gambar ? asset('storage/' . $barang->attachment_gambar) : null,
+        ]);
     }
 
-    
+    public function show($id)
+    {
+        $barang = BarangMasuk::findOrFail($id);
+        return response()->json($barang);
+    }
 
-    public function getDetails($id)
-{
-    $barang = BarangMasuk::findOrFail($id);
-    return response()->json([
-        'kode_barang' => $barang->kode_barang,
-        'nama_barang' => $barang->nama_barang,
-        'vendor' => $barang->vendor->name,
-        'kuantiti' => $barang->kuantiti,
-        'tanggal_masuk' => $barang->created_at->format('Y-m-d'),
-        'deskripsi_barang' => $barang->deskripsi_barang,
-        'tipe_barang' => $barang->tipe_barang,
-        'serial_number' => $barang->serial_number,
-        'tempat_penyimpanan' => $barang->tempat_penyimpanan,
-        'gambar' => asset('images/' . $barang->attachment_gambar), // Pastikan ini sesuai dengan path gambar
-    ]);
-}
-
-
-    
 }

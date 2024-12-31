@@ -64,20 +64,16 @@ class KirimBarangController extends Controller
                 'keterangan' => $validatedData['keterangan'],           // Simpan Keterangan
                 'jumlah_kirim' => $validatedData['jumlah_kirim'],       // Simpan jumlah kirim
             ]);
-    
             // Update jumlah barang di stok
             if ($stock) {
                 // Kurangi jumlah barang di stok
                 $stock->jumlah -= $validatedData['jumlah_kirim'];
-    
                 // Jika jumlah menjadi 0, ubah status menjadi 'kosong'
                 if ($stock->jumlah <= 0) {
                     $stock->status = 'kosong'; // Ubah status menjadi 'kosong'
                 }
-    
                 $stock->save();
             }
-    
             // Redirect dengan pesan sukses
             return redirect('/barangkeluar')->with('success', 'Barang berhasil dikirim!');
         } catch (\Exception $e) {

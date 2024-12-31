@@ -45,11 +45,22 @@ class BarangMasukController extends Controller
             'tempat_penyimpanan' => 'nullable|string|max:255',
             'attachment_gambar' => 'nullable|image|max:2048',
         ]);
-
+    
         $hargaBeli = (float) str_replace('.', '', $validatedData['harga_beli']);
         $kuantiti = (int) str_replace('.', '', $validatedData['kuantiti']);
-
+    
         try {
+            // Simpan gambar ke public/images
+            $gambarPath = null;
+            if ($request->hasFile('attachment_gambar')) {
+                // Dapatkan nama asli file
+                $originalName = $request->file('attachment_gambar')->getClientOriginalName();
+                // Simpan gambar dan dapatkan path
+                $gambarPath = $request->file('attachment_gambar')->move(public_path('images'), $originalName);
+                // Simpan path relatif ke database
+                $gambarPath = 'images/' . $originalName;
+            }
+    
             BarangMasuk::create([
                 'kode_barang' => $validatedData['kode_barang'],
                 'harga_beli' => $hargaBeli,
@@ -61,14 +72,16 @@ class BarangMasukController extends Controller
                 'tipe_barang' => $validatedData['tipe_barang'],
                 'serial_number' => $validatedData['serial_number'],
                 'tempat_penyimpanan' => $validatedData['tempat_penyimpanan'],
-                'attachment_gambar' => $request->file('attachment_gambar') ? $request->file('attachment_gambar')->store('images') : null,
+                'attachment_gambar' => $gambarPath, // Simpan path gambar
             ]);
-
+    
             return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil ditambahkan!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+        
+    
 
     public function edit($id)
     {
@@ -151,7 +164,13 @@ class BarangMasukController extends Controller
     public function show($id)
     {
         $barang = BarangMasuk::findOrFail($id);
+        
+        // Menggunakan asset() untuk mendapatkan URL yang benar
+        $barang->attachment_gambar = asset('storage/' . $barang->attachment_gambar);
+    
         return response()->json($barang);
     }
+    
+    
 
 }

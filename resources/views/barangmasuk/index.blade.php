@@ -93,6 +93,9 @@ function openModal(id) {
             return response.json();
         })
         .then(data => {
+            console.log(data); // Tambahkan log untuk melihat data yang diterima
+            console.log('Gambar URL:', data.gambar); // Tambahkan log untuk melihat URL gambar
+
             const modalBody = document.getElementById('modalBody');
             modalBody.innerHTML = `
                 <p><strong>Kode Barang:</strong> ${data.kode_barang}</p>
@@ -111,6 +114,7 @@ function openModal(id) {
         })
         .catch(error => console.error('Error fetching data:', error));
 }
+
 
 function closeModal() {
     document.getElementById('detailModal').classList.add('hidden');

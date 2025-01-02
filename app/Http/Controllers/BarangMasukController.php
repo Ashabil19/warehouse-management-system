@@ -12,11 +12,18 @@ use App\Models\Stock;
 
 class BarangMasukController extends Controller
 {
+    // public function indexBarangMasuk()
+    // {
+    //     $barangMasuk = BarangMasuk::all();
+    //     return view('barangmasuk.index', compact('barangMasuk'));
+    // }
+
     public function indexBarangMasuk()
     {
-        $barangMasuk = BarangMasuk::all();
+        $barangMasuk = BarangMasuk::orderBy('created_at', 'desc')->get(); // Mengambil data dan mengurutkannya dari terbaru ke terlama
         return view('barangmasuk.index', compact('barangMasuk'));
     }
+
 
     public function indexStock()
     {

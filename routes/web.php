@@ -12,22 +12,25 @@ Route::get('/', function () {
     return view('home'); 
 })->name('home');
 
-// Route Vendor tanpa middleware auth
-Route::prefix('vendor')->group(function () {
-    Route::get('/', [VendorController::class, 'index'])->name('vendor.index');
-    Route::get('/create', [VendorController::class, 'create'])->name('vendor.create');
-    Route::post('/', [VendorController::class, 'store'])->name('vendor.store');
-    Route::get('/{id}/edit', [VendorController::class, 'edit'])->name('vendor.edit');
-    Route::put('/{id}', [VendorController::class, 'update'])->name('vendor.update');
-    Route::delete('/{id}', [VendorController::class, 'destroy'])->name('vendor.destroy');
-});
+
 
 // Routes with auth middleware
 Route::middleware(['auth'])->group(function () {
     // Route untuk role 'purchasing'
     Route::middleware([RoleMiddleware::class . ':purchasing'])->group(function () {
-        Route::get('/inputbarang', [BarangMasukController::class, 'create'])->name('inputbarang');
-        Route::post('/barangmasuk', [BarangMasukController::class, 'store'])->name('barangmasuk.store');
+    Route::get('/inputbarang', [BarangMasukController::class, 'create'])->name('inputbarang');
+    Route::post('/barangmasuk', [BarangMasukController::class, 'store'])->name('barangmasuk.store');
+
+
+        // Route Vendor tanpa middleware auth
+    Route::prefix('vendor')->group(function () {
+        Route::get('/', [VendorController::class, 'index'])->name('vendor.index');
+        Route::get('/create', [VendorController::class, 'create'])->name('vendor.create');
+        Route::post('/', [VendorController::class, 'store'])->name('vendor.store');
+        Route::get('/{id}/edit', [VendorController::class, 'edit'])->name('vendor.edit');
+        Route::put('/{id}', [VendorController::class, 'update'])->name('vendor.update');
+        Route::delete('/{id}', [VendorController::class, 'destroy'])->name('vendor.destroy');
+    });
     });
 
     // Route untuk role 'logistik'

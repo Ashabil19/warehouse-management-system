@@ -39,12 +39,9 @@
                         </button>
                         
                         @if($barang->status === 'pending')
-                            <form action="{{ route('barangmasuk.accept', $barang->id) }}" method="POST" class="inline">
-                                @csrf
-                                <button type="submit" onclick="return confirm('Apakah Anda yakin ingin memindahkan barang ini ke stok?');" class="inline-block px-6 py-2 bg-[#90eb74] text-black border border-[#159b25] rounded font-bold hover:bg-[#75e155]">
-                                    Accept
-                                </button>
-                            </form>
+                            <button onclick="openAcceptModal('{{ route('barangmasuk.accept', $barang->id) }}')" class="inline-block px-6 py-2 bg-[#90eb74] text-black border border-[#159b25] rounded font-bold hover:bg-[#75e155]">
+                                Accept
+                            </button>
 
                             <form action="{{ route('barangmasuk.reject', $barang->id) }}" method="POST" class="inline">
                                 @csrf
@@ -72,6 +69,23 @@
     </table>
 </div>
 
+<!-- Modal Konfirmasi Accept -->
+<div id="acceptModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="relative bg-white rounded-lg p-6 w-11/12 max-w-lg">
+        <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-800" style="font-size:34px" onclick="closeAcceptModal()">×</button>
+        <h2 class="text-2xl font-bold text-purple-800 mb-4">Konfirmasi Accept</h2>
+        <p>Apakah Anda yakin ingin memindahkan barang ini ke stok?</p>
+        <div class="mt-4">
+            <button id="confirmAcceptButton" class="px-4 py-2 bg-[#90eb74] text-black border border-[#159b25] rounded font-bold hover:bg-[#75e155]">
+                Ya, Accept
+            </button>
+            <button onclick="closeAcceptModal()" class="px-4 py-2 bg-gray-300 text-black border border-gray-500 rounded font-bold hover:bg-gray-400">
+                Batal
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- Modal -->
 <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
     <div class="relative bg-white rounded-lg p-6 w-11/12 max-w-lg">
@@ -84,6 +98,33 @@
 </div>
 
 <script>
+let acceptUrl = '';
+
+function openAcceptModal(url) {
+    acceptUrl = url; // Simpan URL untuk pengiriman
+    document.getElementById('acceptModal').classList.remove('hidden');
+}
+
+function closeAcceptModal() {
+    document.getElementById('acceptModal').classList.add('hidden');
+}
+
+document.getElementById('confirmAcceptButton').addEventListener('click', function() {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = acceptUrl;
+
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = '_token';
+    csrfInput.value = '{{ csrf_token() }}'; // Token CSRF
+
+    form.appendChild(csrfInput);
+
+    document.body.appendChild(form);
+    form.submit(); // Kirim formulir
+});
+
 function openModal(id) {
     fetch(`/barangmasuk/${id}`)
         .then(response => {
@@ -93,9 +134,6 @@ function openModal(id) {
             return response.json();
         })
         .then(data => {
-            console.log(data); // Tambahkan log untuk melihat data yang diterima
-            console.log('Gambar URL:', data.gambar); // Tambahkan log untuk melihat URL gambar
-
             const modalBody = document.getElementById('modalBody');
             modalBody.innerHTML = `
                 <p><strong>Kode Barang:</strong> ${data.kode_barang}</p>
@@ -114,7 +152,6 @@ function openModal(id) {
         })
         .catch(error => console.error('Error fetching data:', error));
 }
-
 
 function closeModal() {
     document.getElementById('detailModal').classList.add('hidden');

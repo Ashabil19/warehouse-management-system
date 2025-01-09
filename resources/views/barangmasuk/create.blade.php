@@ -112,7 +112,9 @@
             <p><strong>Tipe Barang:</strong> <span id="modal_tipe_barang"></span></p>
             <p><strong>Serial Number:</strong> <span id="modal_serial_number"></span></p>
             <p><strong>Tempat Penyimpanan:</strong> <span id="modal_tempat_penyimpanan"></span></p>
-            <p><strong>Gambar:</strong> <img id="modal_gambar" src="" alt="Gambar" class="mt-2" style="max-width: 100%; height: auto;"></p>
+            <p><strong>Gambar:</strong> 
+                <img id="modal_gambar" src="" alt="Gambar" class="mt-2" style="width: 300px; height: 300px; object-fit: cover;">
+            </p>
         </div>
 
         <div class="mt-4">
@@ -121,6 +123,7 @@
         </div>
     </div>
 </div>
+
 
 <script>
     function formatCurrency(input) {

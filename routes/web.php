@@ -50,6 +50,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/kirimbarang', [KirimBarangController::class, 'create'])->name('kirimbarang.create');
         Route::post('/kirimbarang', [KirimBarangController::class, 'store'])->name('kirimbarang.store');
         Route::get('/kirimbarang/export', [KirimBarangController::class, 'export'])->name('kirimbarang.export');
+        Route::patch('/kirimbarang/{id}/update-link-resi', [KirimBarangController::class, 'updateLinkResi'])->name('kirimbarang.updateLinkResi');  
+
     });
 
     // Route untuk role 'sales'

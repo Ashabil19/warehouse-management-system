@@ -40,15 +40,12 @@ class KirimBarangController extends Controller
             'shipper' => 'required|string|max:255',         // Validasi untuk Shipper
             'keterangan' => 'nullable|string|max:500',      // Validasi untuk Keterangan
         ]);
-    
         // Ambil stok berdasarkan barang_id
         $stock = Stock::find($validatedData['barang_id']);
-    
         // Cek apakah jumlah yang ingin dikirim tidak melebihi stok
         if ((int)$validatedData['jumlah_kirim'] > (int)$stock->jumlah) {
             return redirect()->back()->withErrors(['jumlah_kirim' => 'Jumlah kirim melebihi stok yang tersedia.']);
-        }
-    
+        } 
         // Simpan data ke tabel KirimBarang
         try {
             $kirimBarang = KirimBarang::create([
@@ -80,22 +77,19 @@ class KirimBarangController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan. Coba lagi.');
         }
     }
+    public function updateLinkResi(Request $request, $id)  
+    {  
+        $validatedData = $request->validate([  
+            'link_resi' => 'nullable|string|max:255',  
+        ]);  
+      
+        $kirimBarang = KirimBarang::findOrFail($id);  
+        $kirimBarang->link_resi = $validatedData['link_resi'];  
+        $kirimBarang->save();  
+      
+        return response()->json(['success' => true]);  
+    }  
     
-    
-    
-
-    public function updateLinkResi(Request $request, $id)
-    {
-        $validatedData = $request->validate([
-            'link_resi' => 'nullable|string|max:255',
-        ]);
-
-        $kirimBarang = KirimBarang::findOrFail($id);
-        $kirimBarang->link_resi = $validatedData['link_resi'];
-        $kirimBarang->save();
-
-        return response()->json(['success' => true]);
-    }
 
     // Menampilkan semua data kirimbarang
     public function index()

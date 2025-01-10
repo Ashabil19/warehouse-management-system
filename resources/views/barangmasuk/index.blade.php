@@ -5,17 +5,21 @@
 @section('content')
 
 <h1 style="color: #5B3E99; font-weight: bold; text-align: center;">BARANG MASUK</h1>
-<a href="{{ route('barangmasuk.export') }}" 
+<a href="{{ route('stock.export') }}" 
    style="display: inline-block; margin-bottom: 20px; padding: 10px 20px; background-color: #5B3E99; color: #FFF; text-decoration: none; border-radius: 5px; font-weight: bold;">
    Export to Excel
 </a>
+
+  
+<p>URL untuk ekspor: {{ route('barangmasuk.export') }}</p>  
+
 
 <div style="height: 85%; overflow-y: auto;">
     <table class="w-full mt-5 border-collapse">
         <thead>
             <tr>
                 <th class="text-left px-4 py-2 font-bold">No.</th>
-                <th class="text-left px-4 py-2 font-bold">Kode Barang</th>
+                {{-- <th class="text-left px-4 py-2 font-bold">Kode Barang</th> --}}
                 <th class="text-left px-4 py-2 font-bold">Nama Barang</th>
                 <th class="text-left px-4 py-2 font-bold">Vendor</th>
                 <th class="text-left px-4 py-2 font-bold">Kuantiti</th>
@@ -27,7 +31,7 @@
             @foreach ($barangMasuk as $index => $barang)
                 <tr>
                     <td class="px-4 py-2">{{ $index + 1 }}</td>
-                    <td class="px-4 py-2">{{ $barang->kode_barang }}</td>
+                    {{-- <td class="px-4 py-2">{{ $barang->kode_barang }}</td> --}}
                     <td class="px-4 py-2">{{ $barang->nama_barang }}</td>
                     <td class="px-4 py-2">{{ $barang->vendor }}</td>
                     <td class="px-4 py-2">{{ $barang->kuantiti }}</td>
@@ -136,7 +140,7 @@ function openModal(id) {
         .then(data => {
             const modalBody = document.getElementById('modalBody');
             modalBody.innerHTML = `
-                <p><strong>Kode Barang:</strong> ${data.kode_barang}</p>
+          
                 <p><strong>Nama Barang:</strong> ${data.nama_barang}</p>
                 <p><strong>Vendor:</strong> ${data.vendor}</p>
                 <p><strong>Kuantiti:</strong> ${data.kuantiti}</p>

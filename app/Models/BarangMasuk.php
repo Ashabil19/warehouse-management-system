@@ -14,7 +14,7 @@ class BarangMasuk extends Model
 
     // Kolom yang dapat diisi secara massal
     protected $fillable = [
-        'kode_barang',
+        // 'kode_barang',
         'harga_beli',
         'nama_barang',
         'kategori',

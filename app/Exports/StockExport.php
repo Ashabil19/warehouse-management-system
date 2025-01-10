@@ -14,7 +14,6 @@ class StockExport implements FromCollection, WithHeadings
             ->get()
             ->map(function ($stock) {
                 return [
-                    'Kode Barang' => $stock->barangMasuk->kode_barang,
                     'Nama Barang' => $stock->barangMasuk->nama_barang,
                     'Tanggal Masuk' => $stock->tanggal_masuk,
                     'Jumlah' => $stock->jumlah,
@@ -26,7 +25,6 @@ class StockExport implements FromCollection, WithHeadings
     public function headings(): array
     {
         return [
-            'Kode Barang',
             'Nama Barang',
             'Tanggal Masuk',
             'Jumlah',

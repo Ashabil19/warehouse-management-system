@@ -56,11 +56,11 @@
             <h4 class="text-lg font-bold text-indigo-700 mb-4">DETAIL BARANG</h4>
             <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
                 <div>
-                    <p><strong>Kode Barang:</strong> <span id="kode_barang">-</span></p>
+                    {{-- <p><strong>Kode Barang:</strong> <span id="kode_barang">-</span></p> --}}
                     <p><strong>Nama Barang:</strong> <span id="nama_barang">-</span></p>
                     <p><strong>Kuantiti:</strong> <span id="kuantiti">-</span></p>
-                    <p><strong>Gambar:</strong></p>
-                    <img id="gambar_barang" src="" alt="Gambar Barang" class="mt-2" style="max-width: 100%; height: auto; display: none;">
+                    {{-- <p><strong>Gambar:</strong></p> --}}
+                    {{-- <img id="gambar_barang" src="" alt="Gambar Barang" class="mt-2" style="max-width: 100%; height: auto; display: none;"> --}}
                 </div>
                 <div>
                     <p><strong>Vendor:</strong> <span id="vendor">-</span></p>
@@ -127,22 +127,22 @@
             const selectedOption = selectBarang.options[selectBarang.selectedIndex];
 
             // Update detail fields
-            document.getElementById('kode_barang').textContent = selectedOption.getAttribute('data-kode') || '-';
+            // document.getElementById('kode_barang').textContent = selectedOption.getAttribute('data-kode') || '-';
             document.getElementById('nama_barang').textContent = selectedOption.getAttribute('data-nama') || '-';
             document.getElementById('vendor').textContent = selectedOption.getAttribute('data-vendor') || '-';
             document.getElementById('kategori').textContent = selectedOption.getAttribute('data-kategori') || '-';
             document.getElementById('kuantiti').textContent = selectedOption.getAttribute('data-kuantiti') || '-';
 
             // Update image
-            const gambar = selectedOption.getAttribute('data-gambar');
-            const gambarElement = document.getElementById('gambar_barang');
-            if (gambar) {
-                gambarElement.src = gambar;
-                gambarElement.style.display = 'block'; // Show the image
-            } else {
-                gambarElement.src = '';
-                gambarElement.style.display = 'none'; // Hide the image
-            }
+            // const gambar = selectedOption.getAttribute('data-gambar');
+            // const gambarElement = document.getElementById('gambar_barang');
+            // if (gambar) {
+            //     gambarElement.src = gambar;
+            //     gambarElement.style.display = 'block'; // Show the image
+            // } else {
+            //     gambarElement.src = '';
+            //     gambarElement.style.display = 'none'; // Hide the image
+            // }
         });
     </script>
 </div>

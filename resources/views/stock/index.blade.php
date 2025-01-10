@@ -27,7 +27,7 @@
             <tr style="background-color: {{ $index % 2 == 0 ? '#F3F3F3' : '#FFFFFF' }};">
                 <td style="padding: 8px; width: 50px;">{{ $index + 1 }}.</td>
                 <td style="padding: 8px;">
-                    <p style="font-weight: bold;">{{ $stock->barangMasuk->nama_barang }} - {{ $stock->barangMasuk->kode_barang }}</p>
+                    <p style="font-weight: bold;">{{ $stock->barangMasuk->nama_barang }}</p>
                 </td>
                 <td style="padding: 8px;">{{ $stock->barangMasuk->tipe_barang }}</td>
                 <td style="padding: 8px;">{{ $stock->barangMasuk->vendor }}</td>
@@ -65,7 +65,7 @@
                 const modalImage = document.getElementById('modalImage');
 
                 modalBody.innerHTML = `
-                    <p><strong>Kode Barang:</strong> ${data.kode_barang}</p>
+            
                     <p><strong>Nama Barang:</strong> ${data.nama_barang}</p>
                     <p><strong>Vendor:</strong> ${data.vendor}</p>
                     <p><strong>Kuantiti:</strong> ${data.kuantiti}</p>

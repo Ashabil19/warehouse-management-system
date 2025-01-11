@@ -11,7 +11,7 @@
 </a>
 
   
-<p>URL untuk ekspor: {{ route('barangmasuk.export') }}</p>  
+{{-- <p>URL untuk ekspor: {{ route('barangmasuk.export') }}</p>   --}}
 
 
 <div style="height: 85%; overflow-y: auto;">

@@ -29,6 +29,8 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}', [VendorController::class, 'destroy'])->name('vendor.destroy');  
         });  
     });  
+    Route::get('/barangmasuk/export', [BarangMasukController::class, 'exportBarangMasuk'])->name('barangmasuk.export');
+
   
     // Route untuk role 'logistik'  
     Route::middleware([RoleMiddleware::class . ':purchasing'])->group(function () {  
@@ -38,7 +40,6 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/barangmasuk/accept/{id}', [BarangMasukController::class, 'accept'])->name('barangmasuk.accept');  
         Route::delete('/barangmasuk/{id}', [BarangMasukController::class, 'destroy'])->name('barangmasuk.destroy');  
   
-        Route::get('/barangmasuk/export', [BarangMasukController::class, 'exportBarangMasuk'])->name('barangmasuk.export');  
   
         Route::get('/stock', [BarangMasukController::class, 'indexStock'])->name('stock.index');  
         Route::get('/stock/export', [BarangMasukController::class, 'exportStock'])->name('stock.export');  

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\BarangMasuk;  
 use App\Exports\StockExport; 
 use App\Exports\StockExports;   
+use Carbon\Carbon;  
 
 use App\Models\Vendor;  
 use App\Models\Stock;  
@@ -32,64 +33,68 @@ class BarangMasukController extends Controller
         return view('barangmasuk.create', compact('vendors'));  
     }  
   
-    public function store(Request $request)  
-{  
-    // Verifikasi zona waktu  
-    \Log::info('Zona waktu saat ini: ' . date_default_timezone_get());  
+    // use Carbon\Carbon;  
   
-    $validatedData = $request->validate([  
-        'harga_beli' => 'required|string',  
-        'nama_barang' => 'required|string|max:255',  
-        'kategori' => 'required|string|max:255',  
-        'kuantiti' => 'required|string',  
-        'deskripsi_barang' => 'nullable|string',  
-        'vendor' => 'required|string|exists:vendors,name', // Ubah validasi untuk vendor  
-        'tipe_barang' => 'nullable|string|max:255',  
-        'serial_number' => 'nullable|string|max:255',  
-        'tempat_penyimpanan' => 'nullable|string|max:255',  
-        'attachment_gambar' => 'nullable|image|max:2048',  
-    ]);  
-  
-    $hargaBeli = (float) str_replace('.', '', $validatedData['harga_beli']);  
-    $kuantiti = (int) str_replace('.', '', $validatedData['kuantiti']);  
-  
-    try {  
-        // Log data yang akan disimpan  
-        \Log::info('Data yang akan disimpan:', $validatedData);  
-  
-        // Simpan gambar ke public/images  
-        $gambarPath = null;  
-        if ($request->hasFile('attachment_gambar')) {  
-            $originalName = $request->file('attachment_gambar')->getClientOriginalName();  
-            $gambarPath = $request->file('attachment_gambar')->move(public_path('images'), $originalName);  
-            $gambarPath = 'images/' . $originalName;  
-        }  
-  
-        // Tambahkan tanggal_masuk dengan zona waktu yang benar  
-        $tanggalMasuk = now();  
-  
-        BarangMasuk::create([  
-            'harga_beli' => $hargaBeli,  
-            'nama_barang' => $validatedData['nama_barang'],  
-            'kategori' => $validatedData['kategori'],  
-            'kuantiti' => $kuantiti,  
-            'deskripsi_barang' => $validatedData['deskripsi_barang'],  
-            'vendor' => $validatedData['vendor'], // Simpan nama vendor  
-            'tipe_barang' => $validatedData['tipe_barang'],  
-            'serial_number' => $validatedData['serial_number'],  
-            'tempat_penyimpanan' => $validatedData['tempat_penyimpanan'],  
-            'attachment_gambar' => $gambarPath,  
-            'tanggal_masuk' => $tanggalMasuk,  
-        ]);  
-  
-        return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil ditambahkan!');  
-    } catch (\Exception $e) {  
-        // Log kesalahan  
-        \Log::error('Terjadi kesalahan saat menyimpan barang: ' . $e->getMessage());  
-        return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());  
+    public function store(Request $request)    
+    {    
+        // Verifikasi zona waktu    
+        \Log::info('Zona waktu saat ini: ' . date_default_timezone_get());    
+      
+        try {    
+            $validatedData = $request->validate([    
+                'harga_beli' => 'required|string',    
+                'nama_barang' => 'required|string|max:255',    
+                'kategori' => 'required|string|max:255',    
+                'kuantiti' => 'required|string',    
+                'deskripsi_barang' => 'nullable|string',    
+                'vendor' => 'required|string|exists:vendors,name',    
+                'tipe_barang' => 'nullable|string|max:255',    
+                'serial_number' => 'nullable|string|max:255',    
+                'tempat_penyimpanan' => 'nullable|string|max:255',    
+                'attachment_gambar' => 'nullable|image|max:2048',    
+            ]);    
+      
+            \Log::info('Data yang diverifikasi:', $validatedData);    
+      
+            $hargaBeli = (float) str_replace('.', '', $validatedData['harga_beli']);    
+            $kuantiti = (int) str_replace('.', '', $validatedData['kuantiti']);    
+      
+            // Simpan gambar ke public/images    
+            $gambarPath = null;    
+            if ($request->hasFile('attachment_gambar')) {    
+                $originalName = $request->file('attachment_gambar')->getClientOriginalName();    
+                $gambarPath = $request->file('attachment_gambar')->move(public_path('images'), $originalName);    
+                $gambarPath = 'images/' . $originalName;    
+            }    
+      
+            // Tambahkan tanggal_masuk dengan zona waktu Jakarta  
+            $tanggalMasuk = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:00');    
+      
+            BarangMasuk::create([    
+                'harga_beli' => $hargaBeli,    
+                'nama_barang' => $validatedData['nama_barang'],    
+                'kategori' => $validatedData['kategori'],    
+                'kuantiti' => $kuantiti,    
+                'deskripsi_barang' => $validatedData['deskripsi_barang'],    
+                'vendor' => $validatedData['vendor'],    
+                'tipe_barang' => $validatedData['tipe_barang'],    
+                'serial_number' => $validatedData['serial_number'],    
+                'tempat_penyimpanan' => $validatedData['tempat_penyimpanan'],    
+                'attachment_gambar' => $gambarPath,    
+                'tanggal_masuk' => $tanggalMasuk,    
+            ]);    
+      
+            \Log::info('Barang berhasil ditambahkan:', $validatedData);    
+      
+            return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil ditambahkan!');    
+        } catch (\Exception $e) {    
+            // Log kesalahan    
+            \Log::error('Terjadi kesalahan saat menyimpan barang: ' . $e->getMessage(), ['exception' => $e]);    
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());    
+        }    
     }  
-}  
-
+    
+    
 
  
   

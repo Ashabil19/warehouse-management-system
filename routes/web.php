@@ -30,6 +30,7 @@ Route::middleware(['auth'])->group(function () {
         });  
     });  
     Route::get('/barangmasuk/export', [BarangMasukController::class, 'exportBarangMasuk'])->name('barangmasuk.export');
+    Route::get('/barangmasuk/export', [BarangMasukController::class, 'exportBarangMasuk'])->name('barangmasuk.export');
 
   
     // Route untuk role 'logistik'  

@@ -6,7 +6,9 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\BarangMasukExport;  
 use Illuminate\Http\Request;  
 use App\Models\BarangMasuk;  
-use App\Exports\StockExport;   
+use App\Exports\StockExport; 
+use App\Exports\StockExports;   
+
 use App\Models\Vendor;  
 use App\Models\Stock;  
   
@@ -145,7 +147,7 @@ class BarangMasukController extends Controller
   
     public function exportBarangMasuk()
     {
-        return Excel::download(new StockExport, 'barang_masuk.xlsx');    
+        return Excel::download(new StockExports, 'barang_masuk.xlsx');    
     }
 
    

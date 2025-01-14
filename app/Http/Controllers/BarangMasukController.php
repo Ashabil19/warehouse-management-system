@@ -35,63 +35,64 @@ class BarangMasukController extends Controller
   
     // use Carbon\Carbon;  
   
-    public function store(Request $request)    
-    {    
-        // Verifikasi zona waktu    
-        \Log::info('Zona waktu saat ini: ' . date_default_timezone_get());    
+    public function store(Request $request)      
+    {      
+        // Set the default timezone to Jakarta  
+        date_default_timezone_set('Asia/Jakarta');  
+        \Log::info('Zona waktu saat ini: ' . date_default_timezone_get());      
       
-        try {    
-            $validatedData = $request->validate([    
-                'harga_beli' => 'required|string',    
-                'nama_barang' => 'required|string|max:255',    
-                'kategori' => 'required|string|max:255',    
-                'kuantiti' => 'required|string',    
-                'deskripsi_barang' => 'nullable|string',    
-                'vendor' => 'required|string|exists:vendors,name',    
-                'tipe_barang' => 'nullable|string|max:255',    
-                'serial_number' => 'nullable|string|max:255',    
-                'tempat_penyimpanan' => 'nullable|string|max:255',    
-                'attachment_gambar' => 'nullable|image|max:2048',    
-            ]);    
+        try {      
+            $validatedData = $request->validate([      
+                'harga_beli' => 'required|string',      
+                'nama_barang' => 'required|string|max:255',      
+                'kategori' => 'required|string|max:255',      
+                'kuantiti' => 'required|string',      
+                'deskripsi_barang' => 'nullable|string',      
+                'vendor' => 'required|string|exists:vendors,name',      
+                'tipe_barang' => 'nullable|string|max:255',      
+                'serial_number' => 'nullable|string|max:255',      
+                'tempat_penyimpanan' => 'nullable|string|max:255',      
+                'attachment_gambar' => 'nullable|image|max:2048',      
+            ]);      
       
-            \Log::info('Data yang diverifikasi:', $validatedData);    
+            \Log::info('Data yang diverifikasi:', $validatedData);      
       
-            $hargaBeli = (float) str_replace('.', '', $validatedData['harga_beli']);    
-            $kuantiti = (int) str_replace('.', '', $validatedData['kuantiti']);    
+            $hargaBeli = (float) str_replace('.', '', $validatedData['harga_beli']);      
+            $kuantiti = (int) str_replace('.', '', $validatedData['kuantiti']);      
       
-            // Simpan gambar ke public/images    
-            $gambarPath = null;    
-            if ($request->hasFile('attachment_gambar')) {    
-                $originalName = $request->file('attachment_gambar')->getClientOriginalName();    
-                $gambarPath = $request->file('attachment_gambar')->move(public_path('images'), $originalName);    
-                $gambarPath = 'images/' . $originalName;    
-            }    
+            // Simpan gambar ke public/images      
+            $gambarPath = null;      
+            if ($request->hasFile('attachment_gambar')) {      
+                $originalName = $request->file('attachment_gambar')->getClientOriginalName();      
+                $gambarPath = $request->file('attachment_gambar')->move(public_path('images'), $originalName);      
+                $gambarPath = 'images/' . $originalName;      
+            }      
       
-            // Tambahkan tanggal_masuk dengan zona waktu Jakarta  
-            $tanggalMasuk = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:00');    
+            // Tambahkan tanggal_masuk dengan zona waktu Jakarta    
+            $tanggalMasuk = Carbon::now()->format('Y-m-d H:i:00');      
       
-            BarangMasuk::create([    
-                'harga_beli' => $hargaBeli,    
-                'nama_barang' => $validatedData['nama_barang'],    
-                'kategori' => $validatedData['kategori'],    
-                'kuantiti' => $kuantiti,    
-                'deskripsi_barang' => $validatedData['deskripsi_barang'],    
-                'vendor' => $validatedData['vendor'],    
-                'tipe_barang' => $validatedData['tipe_barang'],    
-                'serial_number' => $validatedData['serial_number'],    
-                'tempat_penyimpanan' => $validatedData['tempat_penyimpanan'],    
-                'attachment_gambar' => $gambarPath,    
-                'tanggal_masuk' => $tanggalMasuk,    
-            ]);    
+            BarangMasuk::create([      
+                'harga_beli' => $hargaBeli,      
+                'nama_barang' => $validatedData['nama_barang'],      
+                'kategori' => $validatedData['kategori'],      
+                'kuantiti' => $kuantiti,      
+                'deskripsi_barang' => $validatedData['deskripsi_barang'],      
+                'vendor' => $validatedData['vendor'],      
+                'tipe_barang' => $validatedData['tipe_barang'],      
+                'serial_number' => $validatedData['serial_number'],      
+                'tempat_penyimpanan' => $validatedData['tempat_penyimpanan'],      
+                'attachment_gambar' => $gambarPath,      
+                'tanggal_masuk' => $tanggalMasuk,      
+            ]);      
       
-            \Log::info('Barang berhasil ditambahkan:', $validatedData);    
+            \Log::info('Barang berhasil ditambahkan:', $validatedData);      
       
-            return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil ditambahkan!');    
-        } catch (\Exception $e) {    
-            // Log kesalahan    
-            \Log::error('Terjadi kesalahan saat menyimpan barang: ' . $e->getMessage(), ['exception' => $e]);    
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());    
-        }    
+            return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil ditambahkan!');      
+        } catch (\Exception $e) {      
+            // Log kesalahan      
+            \Log::error('Terjadi kesalahan saat menyimpan barang: ' . $e->getMessage(), ['exception' => $e]);      
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());      
+        }      
     }  
     
     

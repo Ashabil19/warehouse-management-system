@@ -129,40 +129,33 @@ document.getElementById('confirmAcceptButton').addEventListener('click', functio
     form.submit(); // Kirim formulir
 });
 
-function openModal(id) {  
-    fetch(`/barangmasuk/${id}`)  
-        .then(response => {  
-            if (!response.ok) {  
-                throw new Error(`HTTP error! Status: ${response.status}`);  
-            }  
-            return response.json();  
-        })  
-        .then(data => {  
-            // Format waktu  
-            const date = new Date(data.created_at);  
-            const formattedTanggalMasuk = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;  
-  
-            const modalBody = document.getElementById('modalBody');  
-            modalBody.innerHTML = `  
-                <p><strong>Nama Barang:</strong> ${data.nama_barang}</p>  
-                <p><strong>Vendor:</strong> ${data.vendor}</p>  
-                <p><strong>Kuantiti:</strong> ${data.kuantiti}</p>  
-                <p><strong>Tanggal Masuk:</strong> ${formattedTanggalMasuk}</p>  
-                <p><strong>Deskripsi:</strong> ${data.deskripsi_barang || 'Tidak ada'}</p>  
-                <p><strong>Tipe Barang:</strong> ${data.tipe_barang || 'Tidak ada'}</p>  
-                <p><strong>Serial Number:</strong> ${data.serial_number || 'Tidak ada'}</p>  
-                <p><strong>Tempat Penyimpanan:</strong> ${data.tempat_penyimpanan || 'Tidak ada'}</p>  
-                <p><strong>Gambar:</strong></p>  
-                <img src="${data.gambar}" alt="Gambar Barang" style="max-width: 100%; height: auto;">  
-            `;  
-            document.getElementById('detailModal').classList.remove('hidden');  
-        })  
-        .catch(error => console.error('Error fetching data:', error));  
-}  
-
-
-
-
+function openModal(id) {
+    fetch(`/barangmasuk/${id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+          
+                <p><strong>Nama Barang:</strong> ${data.nama_barang}</p>
+                <p><strong>Vendor:</strong> ${data.vendor}</p>
+                <p><strong>Kuantiti:</strong> ${data.kuantiti}</p>
+                <p><strong>Tanggal Masuk:</strong> ${data.created_at}</p>
+                <p><strong>Deskripsi:</strong> ${data.deskripsi_barang}</p>
+                <p><strong>Tipe Barang:</strong> ${data.tipe_barang}</p>
+                <p><strong>Serial Number:</strong> ${data.serial_number}</p>
+                <p><strong>Tempat Penyimpanan:</strong> ${data.tempat_penyimpanan}</p>
+                <p><strong>Gambar:</strong></p>
+                <img src="${data.gambar}" alt="Gambar Barang" style="max-width: 100%; height: auto;">
+            `;
+            document.getElementById('detailModal').classList.remove('hidden');
+        })
+        .catch(error => console.error('Error fetching data:', error));
+}
 
 function closeModal() {
     document.getElementById('detailModal').classList.add('hidden');

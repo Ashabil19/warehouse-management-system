@@ -10,10 +10,7 @@
               
             <img src="https://via.placeholder.com/800x400" alt="Placeholder Image" class="rounded-lg shadow-lg mb-6">  
   
-            <a href="{{ route('login') }}"   
-               class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-200">  
-                Login  
-            </a>  
+          
         </div>  
     @else  
         <div class="flex flex-col items-center justify-center h-screen text-center">  

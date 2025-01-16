@@ -34,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
 
   
     // Route untuk role 'logistik'  
-    Route::middleware([RoleMiddleware::class . ':purchasing'])->group(function () {  
+    Route::middleware([RoleMiddleware::class . ':logistik'])->group(function () {  
         Route::get('/barangmasuk', [BarangMasukController::class, 'indexBarangMasuk'])->name('barangmasuk.index');  
         Route::get('/barangmasuk/{id}', [BarangMasukController::class, 'show'])->name('barangmasuk.show');  
         Route::post('/barangmasuk/{id}/reject', [BarangMasukController::class, 'reject'])->name('barangmasuk.reject');  
@@ -52,7 +52,7 @@ Route::middleware(['auth'])->group(function () {
     });  
   
     // Route untuk role 'sales'  
-    Route::middleware([RoleMiddleware::class . ':purchasing'])->group(function () {  
+    Route::middleware([RoleMiddleware::class . ':logistik'])->group(function () {  
         Route::get('/barangkeluar', [KirimBarangController::class, 'index'])->name('kirimbarang.index');  
     });  
   

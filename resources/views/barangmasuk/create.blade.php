@@ -4,7 +4,20 @@
     
 @section('content')    
 <div class="max-w-6xl mx-auto mt-10">      
-    <h2 class="text-3xl font-bold text-purple-700 mb-8 text-right">INPUT BARANG</h2>      
+    <div style="display:flex; justify-content:space-between; align-items:center">
+        <h2 class="text-3xl font-bold text-purple-700 mb-8 text-right">INPUT BARANG</h2>
+
+    
+    
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <x-responsive-nav-link :href="route('logout')"
+                    onclick="event.preventDefault();
+                                this.closest('form').submit();">
+                {{ __('Log Out') }}
+            </x-responsive-nav-link>
+        </form>
+    </div>
           
     <form id="barangMasukForm" action="{{ route('barangmasuk.store') }}" method="POST" enctype="multipart/form-data">      
         @csrf      

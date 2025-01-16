@@ -14,14 +14,24 @@ class RoleMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     // app/Http/Middleware/RoleMiddleware.php
-    public function handle($request, Closure $next, $role)
-    {
-        if (!auth()->check() || auth()->user()->role !== $role) {
-            abort(403, 'Unauthorized');
-        }
-
-        return $next($request);
-    }
+    public function handle($request, Closure $next, $role)  
+    {  
+        // Cek akses untuk halaman barangmasuk  
+        if ($request->is('barangmasuk*')) {  
+            // Jika user terautentikasi, boleh akses  
+            if (auth()->check()) {  
+                return $next($request);  
+            }  
+        }  
+      
+        // Cek akses untuk route lainnya  
+        if (!auth()->check() || auth()->user()->role !== $role) {  
+            abort(403, 'Unauthorized');  
+        }  
+      
+        return $next($request);  
+    }  
+    
 
     
 }

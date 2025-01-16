@@ -7,6 +7,8 @@ use App\Exports\BarangMasukExport;
 use Illuminate\Http\Request;  
 use App\Models\BarangMasuk;  
 use App\Exports\StockExport; 
+use App\Exports\ExportsLogistik; // Pastikan ini di bagian atas file  
+
 use App\Exports\StockExports;   
 use Carbon\Carbon;  
 
@@ -26,6 +28,11 @@ class BarangMasukController extends Controller
         $stocks = Stock::all();  
         return view('stock.index', compact('stocks'));  
     }  
+
+    public function exportLogistik()  
+{  
+    return Excel::download(new ExportsLogistik, 'logistik_barangmasuk.xlsx');  
+}  
   
     public function create()  
     {  

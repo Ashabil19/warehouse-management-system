@@ -86,12 +86,16 @@
             <li>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();"
-                            class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700 hover:text-white transition duration-200">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
+                    <a href="{{ route('logout') }}" 
+                        class="flex items-center gap-3 px-4 py-2 rounded-lg  bg-red-500 
+                               text-gray-800 hover:text-white hover:bg-red-600 
+                               {{ request()->routeIs('logout') ? 'bg-gradient-to-r from-blue-700 to-purple-600 text-white font-semibold' : '' }}"
+                        onclick="event.preventDefault(); this.closest('form').submit();">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 011 1v4a2 2 0 11-4 0H7a2 2 0 11-4 0v-4z" clip-rule="evenodd" />
+                        </svg>
+                        Log Out
+                    </a>
                 </form>
             </li>
             

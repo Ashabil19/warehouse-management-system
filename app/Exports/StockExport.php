@@ -24,7 +24,7 @@ class StockExport implements FromCollection, WithHeadings, WithStyles
                     'ID' => $index++, // Auto-increment index      
                     'Nama Barang' => $stock->barangMasuk->nama_barang,      
                     'Kategori' => $stock->barangMasuk->kategori,      
-                    'Harga Beli' => $stock->barangMasuk->harga_beli,      
+                    // 'Harga Beli' => $stock->barangMasuk->harga_beli,      
                     'Deskripsi' => $stock->barangMasuk->deskripsi_barang,      
                     'Vendor' => $stock->barangMasuk->vendor->name ?? 'N/A',  // Add vendor    
                     'Serial Number' => $stock->barangMasuk->serial_number,  // Add serial number    
@@ -43,7 +43,7 @@ class StockExport implements FromCollection, WithHeadings, WithStyles
             'ID',  // New heading for ID    
             'Nama Barang',      
             'Kategori',      
-            'Harga Beli',      
+            // 'Harga Beli',      
             'Deskripsi',      
             'Vendor',  // New heading for vendor    
             'Serial Number',  // New heading for serial number    

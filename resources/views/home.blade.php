@@ -8,7 +8,7 @@
             <h1 class="text-3xl font-semibold mb-4">Home Page</h1>  
             <p class="text-lg text-gray-700 mb-6">Welcome to the Home page!</p>  
               
-            <img src="https://via.placeholder.com/800x400" alt="Placeholder Image" class="rounded-lg shadow-lg mb-6">  
+            <img src="{{ asset('images/testindo-logo.jpg') }}" alt="Testindo Logo" class="rounded-lg shadow-lg mb-6">  
   
           
         </div>  

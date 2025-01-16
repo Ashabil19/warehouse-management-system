@@ -4,22 +4,14 @@
   
 @section('content')  
 <h1 style="color: #5B3E99; font-weight: bold; text-align: center;">BARANG KELUAR</h1>  
-<div style="display:flex; justify-content:space-between; align-items:center">
     <a href="{{ route('kirimbarang.export') }}" 
         style="display: inline-block; margin-bottom: 20px; padding: 10px 20px; background-color: #5B3E99; color: #FFF; text-decoration: none; border-radius: 5px; font-weight: bold;">
         Export to Excel
     </a>
 
 
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <x-responsive-nav-link :href="route('logout')"
-                onclick="event.preventDefault();
-                            this.closest('form').submit();">
-            {{ __('Log Out') }}
-        </x-responsive-nav-link>
-    </form>
-</div>
+  
+
 
   
 <div style="height: 85%; overflow-y: auto;">  

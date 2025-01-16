@@ -81,6 +81,23 @@
                     Barang Keluar 
                 </a>
             </li>
+
+
+            <li>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <x-responsive-nav-link :href="route('logout')"
+                            onclick="event.preventDefault();
+                                        this.closest('form').submit();"
+                            class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700 hover:text-white transition duration-200">
+                        {{ __('Log Out') }}
+                    </x-responsive-nav-link>
+                </form>
+            </li>
+            
+
+
+
         </ul>
     </aside>
 

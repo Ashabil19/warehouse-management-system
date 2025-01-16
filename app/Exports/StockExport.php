@@ -26,7 +26,7 @@ class StockExport implements FromCollection, WithHeadings, WithStyles
                     'Kategori' => $stock->barangMasuk->kategori,      
                     // 'Harga Beli' => $stock->barangMasuk->harga_beli,      
                     'Deskripsi' => $stock->barangMasuk->deskripsi_barang,      
-                    'Vendor' => $stock->barangMasuk->vendor->name ?? 'N/A',  // Add vendor    
+                    'Vendor' => $stock->barangMasuk->vendor ?? 'N/A',  // Add vendor    
                     'Serial Number' => $stock->barangMasuk->serial_number,  // Add serial number    
                     'Tempat Penyimpanan' => $stock->barangMasuk->tempat_penyimpanan,  // Add storage location    
                     'Tanggal Masuk' => $stock->tanggal_masuk,      

@@ -25,7 +25,7 @@ class StockExports implements FromCollection, WithHeadings, WithStyles
                     'Nama Barang' => $barangMasuk->nama_barang,  
                     'Kategori' => $barangMasuk->kategori,  
                     // Cek apakah user adalah bagian purchasing  
-                    'Harga Beli' => $user->role !== 'purchasing' ? $barangMasuk->harga_beli : null,  
+                    'Harga Beli' => $barangMasuk->harga_beli,  
                     'Deskripsi' => $barangMasuk->deskripsi_barang,  
                     'Vendor' => $barangMasuk->vendor->name ?? 'N/A', // Pastikan untuk mengakses nama vendor  
                     'Serial Number' => $barangMasuk->serial_number,  
@@ -47,7 +47,7 @@ class StockExports implements FromCollection, WithHeadings, WithStyles
             'Nama Barang',  
             'Kategori',  
             // Cek apakah user adalah bagian purchasing  
-            'Harga Beli' => $user->role !== 'purchasing' ? 'Harga Beli' : null,  
+            'Harga Beli' , 
             'Deskripsi',  
             'Vendor',  
             'Serial Number',  

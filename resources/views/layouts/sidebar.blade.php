@@ -83,12 +83,13 @@
                             Kirim Barang    
                         </a>    
                     </li>    
-                    <li>    
-                        <a href="/barangkeluar" class="flex items-center gap-3 px-4 py-2 rounded-lg    
-                            {{ request()->routeIs('barangkeluar') ? 'bg-gradient-to-r from-blue-700 to-purple-600 text-white' : 'text-gray-800 hover:text-white hover:bg-gray-600' }}">    
-                            Barang Keluar    
-                        </a>    
-                    </li>    
+                    <li>  
+                        <a href="{{ route('barangkeluar.index') }}" class="flex items-center gap-3 px-4 py-2 rounded-lg  
+                            {{ request()->routeIs('barangkeluar.index') ? 'bg-gradient-to-r from-blue-700 to-purple-600 text-white' : 'text-gray-800 hover:text-white hover:bg-gray-600' }}">  
+                            Barang Keluar  
+                        </a>  
+                    </li>  
+                      
                 @endif    
                 <li>    
                     <form method="POST" action="{{ route('logout') }}">    

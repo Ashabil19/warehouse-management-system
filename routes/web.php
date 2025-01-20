@@ -1,5 +1,4 @@
-<?php    
-// routes/web.php  
+<?php  
   
 use App\Http\Controllers\ProfileController;  
 use Illuminate\Support\Facades\Route;  
@@ -8,6 +7,7 @@ use App\Http\Controllers\KirimBarangController;
 use App\Http\Controllers\VendorController;  
 use App\Http\Middleware\RoleMiddleware;  
 use App\Exports\ExportsLogistik;  
+use App\Exports\PurchasingStockExport; // Pastikan ini ada  
 use Maatwebsite\Excel\Facades\Excel;  
 use App\Http\Controllers\Auth\AuthenticatedSessionController;  
   
@@ -28,6 +28,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/inputbarang', [BarangMasukController::class, 'create'])->name('inputbarang');  
         Route::post('/barangmasuk', [BarangMasukController::class, 'store'])->name('barangmasuk.store');  
   
+        // Route untuk ekspor stok untuk purchasing  
+        Route::get('/export-purchasing-stock', [BarangMasukController::class, 'exportPurchasingStock'])->name('exports.purchasing');  
+  
         // Route Vendor tanpa middleware auth  
         Route::prefix('vendor')->group(function () {  
             Route::get('/', [VendorController::class, 'index'])->name('vendor.index');  
@@ -40,9 +43,8 @@ Route::middleware(['auth'])->group(function () {
     });  
   
     Route::get('/barangmasuk/export', [BarangMasukController::class, 'exportBarangMasuk'])->name('barangmasuk.export');  
-    Route::get('/stock/export', [BarangMasukController::class, 'exportStock'])->name('stock.export');  
   
-    // Route untuk role 'logistik'  
+    // Route untuk role 'logistik' dan 'purchasing' untuk akses stock  
     Route::middleware([RoleMiddleware::class . ':logistik,purchasing'])->group(function () {  
         Route::get('/barangmasuk', [BarangMasukController::class, 'indexBarangMasuk'])->name('barangmasuk.index');  
         Route::get('/barangmasuk/{id}', [BarangMasukController::class, 'show'])->name('barangmasuk.show');  
@@ -50,15 +52,23 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/barangmasuk/accept/{id}', [BarangMasukController::class, 'accept'])->name('barangmasuk.accept');  
         Route::delete('/barangmasuk/{id}', [BarangMasukController::class, 'destroy'])->name('barangmasuk.destroy');  
   
-        Route::get('/kirimbarang', [KirimBarangController::class, 'create'])->name('kirimbarang.create');  
-        Route::post('/kirimbarang', [KirimBarangController::class, 'store'])->name('kirimbarang.store');  
-        Route::get('/kirimbarang/export', [KirimBarangController::class, 'export'])->name('kirimbarang.export');  
-        Route::patch('/kirimbarang/{id}/update-link-resi', [KirimBarangController::class, 'updateLinkResi'])->name('kirimbarang.updateLinkResi');  
+        // Route untuk akses stock  
+        Route::get('/stock', [BarangMasukController::class, 'indexStock'])->name('stock.index');  
+        Route::get('stock/export', [App\Http\Controllers\BarangMasukController::class, 'exportStock'])->name('stock.export');  
+
     });  
   
     // Route untuk role 'sales'  
     Route::middleware([RoleMiddleware::class . ':logistik'])->group(function () {  
         Route::get('/barangkeluar', [KirimBarangController::class, 'index'])->name('kirimbarang.index');  
+    });  
+  
+    // Route untuk role 'logistik'  
+    Route::middleware([RoleMiddleware::class . ':logistik'])->group(function () {  
+        Route::get('/kirimbarang', [KirimBarangController::class, 'create'])->name('kirimbarang.create');  
+        Route::post('/kirimbarang', [KirimBarangController::class, 'store'])->name('kirimbarang.store');  
+        Route::get('/kirimbarang/export', [KirimBarangController::class, 'export'])->name('kirimbarang.export');  
+        Route::patch('/kirimbarang/{id}/update-link-resi', [KirimBarangController::class, 'updateLinkResi'])->name('kirimbarang.updateLinkResi');  
     });  
   
     // Route Dashboard  
@@ -75,7 +85,7 @@ Route::middleware(['auth'])->group(function () {
   
     // Route untuk export logistik  
     Route::get('/exports/logistik', function () {  
-        return Excel::download(new ExportsLogistik, 'logistik.xlsx');  
+        return Excel::download(new ExportsLogistik, 'barang_masuk_logistik.xlsx');  
     })->name('exports.logistik');  
 });  
   

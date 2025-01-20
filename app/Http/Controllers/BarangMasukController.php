@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\BarangMasuk;  
 use App\Exports\StockExport; 
 use App\Exports\ExportsLogistik; // Pastikan ini di bagian atas file  
+use App\Exports\PurchasingStockExport; // Pastikan untuk mengimpor kelas ini  
 
 use App\Exports\StockExports;   
 use Carbon\Carbon;  
@@ -158,18 +159,23 @@ class BarangMasukController extends Controller
         $barang->delete();  
         return redirect()->route('barangmasuk.index')->with('success', 'Barang berhasil dihapus.');  
     }  
-  
+
+    
+
     public function exportBarangMasuk()
     {
-        return Excel::download(new StockExports, 'barang_masuk.xlsx');    
+        return Excel::download(new StockExports, 'barang_masuk_purchasing.xlsx');    
     }
-
-   
 
     public function exportStock()    
     {    
-        return Excel::download(new StockExport, 'stock.xlsx');    
+        return Excel::download(new StockExport, 'Stock_logistik.xlsx');    
     } 
+
+
+
+
+
 
 
     public function getDetails($id)  
@@ -187,6 +193,17 @@ class BarangMasukController extends Controller
             'gambar' => $barang->attachment_gambar ? asset('storage/' . $barang->attachment_gambar) : null,  
         ]);  
     }  
+
+  
+
+
+
+    public function exportPurchasingStock()  
+    {  
+        return Excel::download(new PurchasingStockExport, 'purchasing_stock.xlsx');  
+    }  
+    
+
   
     public function show($id)  
     {  

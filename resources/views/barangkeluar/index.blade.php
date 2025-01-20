@@ -22,6 +22,7 @@
                 <th style="text-align: left; padding: 8px; color: #5B3E99;">Actions</th>      
             </tr>      
         </thead>      
+        
         <tbody>      
             @foreach ($kirimBarang as $index => $kirim)      
             <tr style="background-color: {{ $index % 2 == 0 ? '#F3F3F3' : '#FFFFFF' }};">      

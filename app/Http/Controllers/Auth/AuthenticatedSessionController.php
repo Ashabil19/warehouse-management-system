@@ -34,14 +34,14 @@ class AuthenticatedSessionController extends Controller
   
         $request->session()->regenerate();  
   
-        // Cek role pengguna setelah login  
+        // Ambil pengguna yang terautentikasi  
         $user = Auth::user();  
-        $intendedUrl = $request->get('url'); // URL yang ingin diakses  
+        $intendedUrl = $request->get('redirect', '/'); // Ambil URL redirect dari query string  
   
         // Cek apakah pengguna memiliki akses ke URL yang diminta  
         if ($this->userHasAccess($user, $intendedUrl)) {  
             // Redirect ke halaman yang diinginkan setelah login  
-            return redirect()->intended(route('dashboard')); // Ganti 'dashboard' dengan route yang diinginkan  
+            return redirect()->intended($intendedUrl); // Redirect ke URL yang diminta  
         } else {  
             // Jika tidak memiliki akses, logout dan kembalikan dengan pesan kesalahan  
             Auth::logout();  
@@ -57,8 +57,11 @@ class AuthenticatedSessionController extends Controller
     private function userHasAccess($user, $url)  
     {  
         // Logika untuk memeriksa apakah pengguna memiliki akses berdasarkan role  
-        // Misalnya, jika URL mengandung 'inputbarang', hanya 'purchasing' yang boleh akses  
         if (strpos($url, 'inputbarang') !== false && !$user->hasRole('purchasing')) {  
+            return false;  
+        }  
+  
+        if (strpos($url, 'barangmasuk') !== false && !$user->hasRole('logistik')) {  
             return false;  
         }  
   

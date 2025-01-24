@@ -1,6 +1,6 @@
 @extends('layouts.sidebar')
 
-@section('title', 'Tambah Vendor')
+@section('title', 'Tambah Vendor - GudangEasy')
 
 @section('content')
 <div class="container max-w-6xl mx-auto mt-10">

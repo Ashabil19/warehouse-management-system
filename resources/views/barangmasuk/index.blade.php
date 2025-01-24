@@ -1,6 +1,6 @@
 @extends('layouts.sidebar')        
   
-@section('title', 'Barang Masuk')        
+@section('title', 'Barang Masuk - GudangEasy')        
   
 @section('content')        
   

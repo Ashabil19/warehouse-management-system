@@ -19,7 +19,10 @@ Route::get('/', function () {
 // Routes for Auth    
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');    
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);    
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');    
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout'); 
+
+Route::get('/barangmasuk/combined/{id}', [BarangMasukController::class, 'getCombinedData'])->name('barangmasuk.combined');  
+
     
 // Routes with auth middleware    
 Route::middleware(['auth'])->group(function () {    
@@ -41,7 +44,7 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}', [VendorController::class, 'destroy'])->name('vendor.destroy');    
         });    
     });    
-    
+
     Route::get('/barangmasuk/export', [BarangMasukController::class, 'exportBarangMasuk'])->name('barangmasuk.export');    
     
     // Route untuk role 'logistik' dan 'purchasing' untuk akses stock    
@@ -51,7 +54,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/barangmasuk/{id}/reject', [BarangMasukController::class, 'reject'])->name('barangmasuk.reject');    
         Route::post('/barangmasuk/accept/{id}', [BarangMasukController::class, 'accept'])->name('barangmasuk.accept');    
         Route::delete('/barangmasuk/{id}', [BarangMasukController::class, 'destroy'])->name('barangmasuk.destroy');    
-    
+
         // Route untuk akses stock    
         Route::get('/stock', [BarangMasukController::class, 'indexStock'])->name('stock.index');    
         Route::get('stock/export', [App\Http\Controllers\BarangMasukController::class, 'exportStock'])->name('stock.export');    

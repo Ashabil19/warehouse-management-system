@@ -1,6 +1,6 @@
 @extends('layouts.sidebar')  
   
-@section('title', 'Kirim Barang')  
+@section('title', 'Kirim Barang - GudangEasy')  
   
 @section('content')  
 <div class="p-10 bg-gray-100 min-h-screen">  

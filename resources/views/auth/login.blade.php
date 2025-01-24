@@ -1,4 +1,6 @@
 <x-guest-layout>  
+    @section('title', 'Login - GudangEasy')  
+
     <div class="flex min-h-screen">  
         <!-- Left Section -->  
         <div class="w-1/2 bg-gradient-to-br from-purple-600 to-blue-700 flex flex-col justify-center items-center text-white p-8">  

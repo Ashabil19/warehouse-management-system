@@ -1,6 +1,6 @@
 @extends('layouts.sidebar')
 
-@section('title', 'Daftar Vendor')
+@section('title', 'Daftar Vendor - GudangEasy')
 
 @section('content')
 <div class="container mx-auto p-4">

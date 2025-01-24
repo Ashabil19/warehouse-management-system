@@ -1,6 +1,6 @@
 @extends('layouts.sidebar')    
     
-@section('title', 'Input Barang')    
+@section('title', 'Input Barang - GudangEasy')    
     
 @section('content')    
 <div class="max-w-6xl mx-auto mt-10">      

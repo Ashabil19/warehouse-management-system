@@ -1,6 +1,6 @@
 @extends('layouts.sidebar')      
       
-@section('title', 'Barang Keluar')      
+@section('title', 'Barang Keluar - GudangEasy')      
       
 @section('content')      
 <h1 style="color: #5B3E99; font-weight: bold; text-align: center;">BARANG KELUAR</h1>      

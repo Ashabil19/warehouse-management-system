@@ -203,6 +203,8 @@ class BarangMasukController extends Controller
         return Excel::download(new PurchasingStockExport, 'purchasing_stock.xlsx');  
     }  
     
+   
+
 
   
     public function show($id)  
@@ -211,5 +213,26 @@ class BarangMasukController extends Controller
         // Menggunakan asset() untuk mendapatkan URL yang benar  
         $barang->attachment_gambar = asset('storage/' . $barang->attachment_gambar);  
         return response()->json($barang);  
+    }  
+
+    public function getCombinedData($id)  
+    {  
+        $barang = BarangMasuk::findOrFail($id);  
+        $stock = Stock::where('barang_masuk_id', $id)->first(); // Ambil data stock berdasarkan barang_masuk_id  
+  
+        // Gabungkan data  
+        $data = [  
+            'nama_barang' => $barang->nama_barang,  
+            'vendor' => $barang->vendor,  
+            'tipe_barang' => $barang->tipe_barang,  
+            'deskripsi_barang' => $barang->deskripsi_barang,  
+            'serial_number' => $barang->serial_number,  
+            'tempat_penyimpanan' => $barang->tempat_penyimpanan,  
+            'tanggal_masuk' => $barang->tanggal_masuk,  
+            'jumlah' => $stock ? $stock->jumlah : 0, // Ambil jumlah dari stock  
+            'attachment_gambar' => asset('storage/' . $barang->attachment_gambar),  
+        ];  
+  
+        return response()->json($data);  
     }  
 }  

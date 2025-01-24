@@ -1,6 +1,6 @@
 @extends('layouts.sidebar')  
   
-@section('title', 'Edit Vendor')  
+@section('title', 'Edit Vendor - GudangEasy')  
   
 @section('content')  
 <div class="container max-w-6xl mx-auto mt-10">  

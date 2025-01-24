@@ -215,11 +215,18 @@ class BarangMasukController extends Controller
         return response()->json($barang);  
     }  
 
+    
+
     public function getCombinedData($id)  
     {  
-        $barang = BarangMasuk::findOrFail($id);  
-        $stock = Stock::where('barang_masuk_id', $id)->first(); // Ambil data stock berdasarkan barang_masuk_id  
-  
+        $barang = BarangMasuk::find($id);  
+        if (!$barang) {  
+            return response()->json(['error' => 'Barang tidak ditemukan'], 404);  
+        }  
+      
+        // Ambil data stock  
+        $stock = Stock::where('id_barangmasuk', $id)->first();  
+      
         // Gabungkan data  
         $data = [  
             'nama_barang' => $barang->nama_barang,  
@@ -228,11 +235,14 @@ class BarangMasukController extends Controller
             'deskripsi_barang' => $barang->deskripsi_barang,  
             'serial_number' => $barang->serial_number,  
             'tempat_penyimpanan' => $barang->tempat_penyimpanan,  
+            'jumlah' => $stock ? $stock->jumlah : 0,  
             'tanggal_masuk' => $barang->tanggal_masuk,  
-            'jumlah' => $stock ? $stock->jumlah : 0, // Ambil jumlah dari stock  
             'attachment_gambar' => asset('storage/' . $barang->attachment_gambar),  
         ];  
-  
+      
         return response()->json($data);  
     }  
+    
+      
+    
 }  

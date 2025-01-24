@@ -60,9 +60,16 @@
 </div>    
     
 <script>    
-  function openModal(id) {      
-    fetch(`/barangmasuk/combined/${id}`)      
-        .then(response => response.json())      
+
+function openModal(id) {  
+    console.log(`Fetching data for ID: ${id}`); // Tambahkan log ini  
+    fetch(`/barangmasuk/combined/${id}`)  
+        .then(response => {  
+            if (!response.ok) {  
+                throw new Error('Network response was not ok');  
+            }  
+            return response.json();  
+        })  
         .then(data => {      
             const modalBody = document.getElementById('modalBody');      
             const modalImage = document.getElementById('modalImage');    
@@ -83,9 +90,37 @@
             `;      
             modalImage.src = data.attachment_gambar || 'default-image.jpg';      
             document.getElementById('detailModal').classList.remove('hidden');      
-        })      
-        .catch(error => console.error('Error fetching data:', error));      
-}      
+        })   
+        .catch(error => console.error('Error fetching data:', error));  
+}  
+
+//   function openModal(id) {      
+//     fetch(`/barangmasuk/combined/${id}`)  
+     
+//         .then(response => response.json())      
+//         .then(data => {      
+//             const modalBody = document.getElementById('modalBody');      
+//             const modalImage = document.getElementById('modalImage');    
+    
+//             // Format waktu      
+//             const date = new Date(data.tanggal_masuk);      
+//             const formattedTanggalMasuk = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;      
+    
+//             modalBody.innerHTML = `      
+//                 <p><strong>Nama Barang:</strong> ${data.nama_barang}</p>      
+//                 <p><strong>Vendor:</strong> ${data.vendor}</p>      
+//                 <p><strong>Jumlah:</strong> ${data.jumlah}</p>      
+//                 <p><strong>Tanggal Masuk:</strong> ${formattedTanggalMasuk}</p>      
+//                 <p><strong>Deskripsi:</strong> ${data.deskripsi_barang || 'Tidak ada'}</p>      
+//                 <p><strong>Tipe Barang:</strong> ${data.tipe_barang || 'Tidak ada'}</p>      
+//                 <p><strong>Serial Number:</strong> ${data.serial_number || 'Tidak ada'}</p>      
+//                 <p><strong>Tempat Penyimpanan:</strong> ${data.tempat_penyimpanan || 'Tidak ada'}</p>      
+//             `;      
+//             modalImage.src = data.attachment_gambar || 'default-image.jpg';      
+//             document.getElementById('detailModal').classList.remove('hidden');      
+//         })      
+//         .catch(error => console.error('Error fetching data:', error));      
+// }      
     
 function closeModal() {    
     document.getElementById('detailModal').classList.add('hidden');    

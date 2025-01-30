@@ -47,18 +47,18 @@
     </table>    
 </div>    
     
-<!-- Modal untuk Detail Barang -->    
-<div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">    
-    <div class="relative bg-white rounded-lg p-6 w-11/12 max-w-lg">    
-        <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-800" style="font-size:34px" onclick="closeModal()">×</button>    
-        <h2 class="text-2xl font-bold text-purple-800 mb-4">DETAIL BARANG</h2>    
-        <div id="modalBody" class="text-gray-700">    
-            <!-- Data akan diisi di sini dengan JavaScript -->    
-        </div>    
-        <img id="modalImage" class="mt-4 rounded-lg w-full" alt="Gambar Barang" src="">    
-    </div>    
-</div>    
-    
+<!-- Modal untuk Detail Barang -->  
+<div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">  
+    <div class="relative bg-white rounded-lg p-6 w-11/12 max-w-lg">  
+        <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-800" style="font-size:34px" onclick="closeModal()">×</button>  
+        <h2 class="text-2xl font-bold text-purple-800 mb-4">DETAIL BARANG</h2>  
+        <div id="modalBody" class="text-gray-700">  
+            <!-- Data akan diisi di sini dengan JavaScript -->  
+        </div>  
+        <img id="modalImage" class="mt-4 rounded-lg w-full" alt="Gambar Barang" src="">  
+    </div>  
+</div>  
+
 <script>    
 
 function openModal(id) {  

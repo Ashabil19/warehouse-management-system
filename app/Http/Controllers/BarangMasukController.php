@@ -26,9 +26,10 @@ class BarangMasukController extends Controller
   
     public function indexStock()  
     {  
-        $stocks = Stock::all();  
+        $stocks = Stock::orderBy('created_at', 'desc')->get();  
         return view('stock.index', compact('stocks'));  
-    }  
+    }
+    
 
     public function exportLogistik()  
 {  

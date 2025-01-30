@@ -4,6 +4,8 @@
     <meta charset="UTF-8">    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <title>@yield('title', config('app.name', 'Laravel'))</title>  
+    <link rel="icon" href="{{ asset('images/favicon_io/favicon.ico') }}" type="image/x-icon">  
+<link rel="shortcut icon" href="{{ asset('images/favicon_io/favicon.ico') }}" type="image/x-icon">  
     @php  
     $isProduction = app()->environment('production');  
     $manifestPath = $isProduction ? '../public_html/build/manifest.json' : public_path('build/manifest.json');  
